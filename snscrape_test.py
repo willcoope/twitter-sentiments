@@ -16,4 +16,5 @@ for i,tweet in enumerate(sntwitter.TwitterSearchScraper('Tesla since:2010-01-01 
     
 # Creating a dataframe from the tweets list above
 tweets_df = pd.DataFrame(tweets_list, columns=['Datetime', 'Tweet Id', 'Text', 'Username'])
+# Saving the dataframe in a CSV file
 tweets_df.to_csv('CNBC_tesla_tweets.csv')
