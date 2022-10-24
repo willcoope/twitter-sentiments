@@ -3,6 +3,8 @@ import pandas as pd
 
 # Creating list to append tweet data to
 tweets_list = []
+accounts_list = ["CNBC", "FT", "Reuters"]
+keywords_list = ["Tesla", "Apple", "Amazon"]
 
 # Using TwitterSearchScraper to scrape data and append tweets to list
 # Currently adds all tweets from CNBC containing the keyword 'Tesla' that are not retweets or replies
