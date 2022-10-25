@@ -8,7 +8,7 @@ accounts_list = ["CNBC", "FT", "Reuters"]
 for account in accounts_list:
     # Create empty list to store scraped tweets
     tweets_list = []
-    # Search for tweets since 2010 from the specified account whose text contains the keyword 'Tesla'
+    # Search tweets since 2010 from the specified account whose text contains the keyword 'Tesla'
     for i,tweet in enumerate(sntwitter.TwitterSearchScraper('Tesla since:2010-01-01 until:2022-12-31 from:' + account).get_items()):
         if i>20000:
             break
@@ -16,7 +16,7 @@ for account in accounts_list:
         if "@" and "RT" not in tweet.content:
             # Add relevant data to list
             tweets_list.append([tweet.date, tweet.id, tweet.content, tweet.user.username])
-        # Create a dataframe from the tweets_list above
+        # Create dataframe from the tweets_list above
         tweets_df = pd.DataFrame(tweets_list, columns=['Datetime', 'Tweet Id', 'Text', 'Username'])
-        # Save dataframe in a CSV file with custom name according to account scraped
+        # Convert dataframe to CSV file with custom name
         tweets_df.to_csv(account + '_tesla_tweets.csv')
