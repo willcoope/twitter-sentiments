@@ -15,8 +15,8 @@ for account in accounts_list:
         # Disallow replies and retweets
         if "@" and "RT" not in tweet.content:
             # Add relevant data to list
-            tweets_list.append([tweet.date, tweet.id, tweet.content, tweet.user.username])
+            tweets_list.append([tweet.user.username, tweet.date, tweet.content])
         # Create dataframe from the tweets_list above
-        tweets_df = pd.DataFrame(tweets_list, columns=['Datetime', 'Tweet Id', 'Text', 'Username'])
+        tweets_df = pd.DataFrame(tweets_list, columns=['Username', 'Datetime', 'Text'])
         # Convert dataframe to CSV file with custom name
         tweets_df.to_csv(account + '_tesla_tweets.csv')
