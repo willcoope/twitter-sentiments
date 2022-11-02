@@ -1,11 +1,9 @@
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk.tag import pos_tag
-from nltk.tokenize import word_tokenize
-from nltk import FreqDist, classify, NaiveBayesClassifier
+from nltk import classify, NaiveBayesClassifier
 import re, string, random
 import pandas as pd
-import csv
 
 def remove_noise(news_tokens, stop_words = ()):
     cleaned_tokens = []
@@ -54,13 +52,12 @@ for tokens in own_positive_tokens:
 for tokens in own_negative_tokens:
     own_negative_cleaned_tokens_list.append(remove_noise(tokens, stop_words))
 
-positive_tokens_for_model = get_headlines_for_model(own_positive_cleaned_tokens_list)
-negative_tokens_for_model = get_headlines_for_model(own_negative_cleaned_tokens_list)
 positive_dataset = [(headline, "Positive")
-                         for headline in positive_tokens_for_model]
+                         for headline in get_headlines_for_model(own_positive_cleaned_tokens_list)]
 negative_dataset = [(headline, "Negative")
-                     for headline in negative_tokens_for_model]
+                     for headline in get_headlines_for_model(own_negative_cleaned_tokens_list)]
 dataset = positive_dataset + negative_dataset
+
 print("Dataset Length:", len(dataset))
 random.shuffle(dataset)
 train_data = dataset[:1800]
