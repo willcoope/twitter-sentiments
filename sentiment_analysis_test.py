@@ -85,6 +85,8 @@ with open('CNBC_tesla_tweets.csv') as file_obj:
     # Iterate over each row in the csv file using reader object, removing noise and classifying
 
     for row in reader_obj:
-        if(row[2] < '2014-01-01'):
+        if(row[2] == '2014'):
             custom_tokens = remove_noise(word_tokenize(row[3]))
             print(row[2], row[3], classifier.classify(dict([token, True] for token in custom_tokens)))
+
+
