@@ -6,6 +6,9 @@ from nltk import classify, NaiveBayesClassifier
 import re, string, random
 import csv
 import pandas as pd
+import datetime
+from dateutil.relativedelta import relativedelta
+from datetime import datetime
 
 # Remove hyperlinks, punctuation and special characters from tokens
 # Convert remaining tokens to a normal form (losing becomes lose, profits becomes profit)
@@ -75,18 +78,57 @@ print("Accuracy is:", classify.accuracy(classifier, test_data))
 print(classifier.show_most_informative_features(25))
 
 # Open CSV file
+sentiment_price_pairs = {}
+# with open('CNBC_tesla_tweets.csv') as file_obj:
 
-with open('CNBC_tesla_tweets.csv') as file_obj:
+#     # Create reader object by passing the file object to reader method
+
+#     reader_obj = csv.reader(file_obj)
+
+    # Iterate over each row in the csv file using reader object, removing noise and classifying
+    #current_month = datetime(2021, 1, 1)
+    #next_month = current_month + relativedelta(months=1)
+    # current_month = datetime.datetime(2021, 1, 1, 0, 0)
+    # next_month = current_month + relativedelta(months=1)
+    # current_month.strftime('%d/%m/%Y')
+    # next_month.strftime('%d/%m/%Y')
+    # print(type(current_month))
+    # current date and time
+# current_month = datetime(2021,2,1) -- this works pretty well
+current_month = datetime(2013,1,1)
+current_month_str = current_month.strftime("%Y-%m-%d")
+while(current_month_str < "2022-10-01"):
+    next_month = current_month + relativedelta(months=1)
+    #print(type(current_month))
+    #print(type(next_month))
+    current_month_str = current_month.strftime("%Y-%m-%d")
+    #print("current_month_str:", current_month_str)
+    #print(type(current_month_str))
+    next_month_str = next_month.strftime("%Y-%m-%d")
+    #print("next_month_str:", next_month_str)
+    #print(type(next_month_str))
+    total_headlines_count = 0
+    positive_headlines_count = 0
+    with open('CNBC_tesla_tweets.csv') as file_obj:
 
     # Create reader object by passing the file object to reader method
 
-    reader_obj = csv.reader(file_obj)
-
-    # Iterate over each row in the csv file using reader object, removing noise and classifying
-
-    for row in reader_obj:
-        if(row[2] == '2014'):
-            custom_tokens = remove_noise(word_tokenize(row[3]))
-            print(row[2], row[3], classifier.classify(dict([token, True] for token in custom_tokens)))
-
+            reader_obj = csv.reader(file_obj)
+            for row in reader_obj:
+                if(row[2] > current_month_str and row [2] < next_month_str):
+                    total_headlines_count += 1
+                    #print(type(row[2]))
+                    custom_tokens = remove_noise(word_tokenize(row[3]))
+                    if (classifier.classify(dict([token, True] for token in custom_tokens))== "Positive"):
+                        positive_headlines_count += 1
+            #print("Positive headlines: ", positive_headlines_count)
+            #print("Total headlines: ", total_headlines_count)
+            if (total_headlines_count == 0 or positive_headlines_count == 0):
+                sentiment_price_pairs.update({current_month_str:0})
+            else:
+                positive_percentage = (positive_headlines_count / total_headlines_count)*100
+                #print("Positive percentage for ", current_month_str ,": ", positive_percentage)
+                sentiment_price_pairs.update({current_month_str:positive_percentage})
+            current_month = current_month + relativedelta(months=1)
+print(sentiment_price_pairs)
 
