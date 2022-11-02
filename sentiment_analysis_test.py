@@ -32,24 +32,24 @@ def get_headlines_for_model(cleaned_tokens_list):
     for news_tokens in cleaned_tokens_list:
         yield dict([token, True] for token in news_tokens)
 
-own_positive_tokens = []
-own_negative_tokens = []
+positive_headline_tokens = []
+negative_headline_tokens = []
 df = pd.read_csv('all-data.csv', encoding = "ISO-8859-1")
 df.reset_index()
 for index, row in df.iterrows():
     if (row[0] == "positive"):
-        own_positive_tokens.append(row[1].split())
+        positive_headline_tokens.append(row[1].split())
     if (row[0] == "negative"):
-        own_negative_tokens.append(row[1].split())
+        negative_headline_tokens.append(row[1].split())
 
 own_positive_cleaned_tokens_list = []
 own_negative_cleaned_tokens_list = []
 stop_words = stopwords.words('english')
 
-for tokens in own_positive_tokens:
+for tokens in positive_headline_tokens:
     own_positive_cleaned_tokens_list.append(remove_noise(tokens, stop_words))
 
-for tokens in own_negative_tokens:
+for tokens in negative_headline_tokens:
     own_negative_cleaned_tokens_list.append(remove_noise(tokens, stop_words))
 
 positive_dataset = [(headline, "Positive")
