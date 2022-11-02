@@ -5,6 +5,9 @@ from nltk import classify, NaiveBayesClassifier
 import re, string, random
 import pandas as pd
 
+# Remove hyperlinks, punctuation and special characters from tokens
+# Convert remaining tokens to a normal form (losing becomes lose, profits becomes profit)
+
 def remove_noise(news_tokens, stop_words = ()):
     cleaned_tokens = []
     for token, tag in pos_tag(news_tokens):
@@ -23,14 +26,11 @@ def remove_noise(news_tokens, stop_words = ()):
             cleaned_tokens.append(token.lower())
     return cleaned_tokens
 
-def get_all_words(cleaned_tokens_list):
-    for tokens in cleaned_tokens_list:
-        for token in tokens:
-            yield token
-
 def get_headlines_for_model(cleaned_tokens_list):
     for news_tokens in cleaned_tokens_list:
         yield dict([token, True] for token in news_tokens)
+
+# Scrape data from csv file and separate by sentiment
 
 positive_headline_tokens = []
 negative_headline_tokens = []
@@ -44,6 +44,7 @@ for index, row in df.iterrows():
 
 own_positive_cleaned_tokens_list = []
 own_negative_cleaned_tokens_list = []
+
 stop_words = stopwords.words('english')
 
 for tokens in positive_headline_tokens:
@@ -56,8 +57,11 @@ positive_dataset = [(headline, "Positive")
                          for headline in get_headlines_for_model(own_positive_cleaned_tokens_list)]
 negative_dataset = [(headline, "Negative")
                      for headline in get_headlines_for_model(own_negative_cleaned_tokens_list)]
-dataset = positive_dataset + negative_dataset
 
+# Combine data and randomly split
+# Create model with training data then test
+
+dataset = positive_dataset + negative_dataset
 print("Dataset Length:", len(dataset))
 random.shuffle(dataset)
 train_data = dataset[:1800]
