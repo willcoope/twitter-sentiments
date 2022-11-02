@@ -74,10 +74,16 @@ classifier = NaiveBayesClassifier.train(train_data)
 print("Accuracy is:", classify.accuracy(classifier, test_data))
 print(classifier.show_most_informative_features(25))
 
+# Open CSV file
+
 with open('CNBC_tesla_tweets.csv') as file_obj:
+
     # Create reader object by passing the file object to reader method
+
     reader_obj = csv.reader(file_obj)
-    # Iterate over each row in the csv file using reader object
+
+    # Iterate over each row in the csv file using reader object, removing noise and classifying
+
     for row in reader_obj:
         if(row[2] < '2014-01-01'):
             custom_tokens = remove_noise(word_tokenize(row[3]))
