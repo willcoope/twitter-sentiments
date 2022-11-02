@@ -42,6 +42,8 @@ for index, row in df.iterrows():
     if (row[0] == "negative"):
         negative_headline_tokens.append(row[1].split())
 
+# Clean tokens and set sentiment for each headline
+
 own_positive_cleaned_tokens_list = []
 own_negative_cleaned_tokens_list = []
 
