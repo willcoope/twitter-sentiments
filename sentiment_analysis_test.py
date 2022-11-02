@@ -1,8 +1,10 @@
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk.tag import pos_tag
+from nltk.tokenize import word_tokenize
 from nltk import classify, NaiveBayesClassifier
 import re, string, random
+import csv
 import pandas as pd
 
 # Remove hyperlinks, punctuation and special characters from tokens
@@ -70,4 +72,13 @@ train_data = dataset[:1800]
 test_data = dataset[1800:]
 classifier = NaiveBayesClassifier.train(train_data)
 print("Accuracy is:", classify.accuracy(classifier, test_data))
-print(classifier.show_most_informative_features(20))
+print(classifier.show_most_informative_features(25))
+
+with open('CNBC_tesla_tweets.csv') as file_obj:
+    # Create reader object by passing the file object to reader method
+    reader_obj = csv.reader(file_obj)
+    # Iterate over each row in the csv file using reader object
+    for row in reader_obj:
+        if(row[2] < '2014-01-01'):
+            custom_tokens = remove_noise(word_tokenize(row[3]))
+            print(row[2], row[3], classifier.classify(dict([token, True] for token in custom_tokens)))
