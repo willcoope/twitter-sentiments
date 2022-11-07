@@ -36,7 +36,6 @@ def get_headlines_for_model(cleaned_tokens_list):
     for news_tokens in cleaned_tokens_list:
         yield dict([token, True] for token in news_tokens)
 
-
 # Scrape data from csv file and separate by sentiment
 
 positive_headline_tokens = []
@@ -56,7 +55,6 @@ for index, row in df.iterrows():
         positive_headline_tokens.append(row[0].split())
     if (row[1] == "negative"):
         negative_headline_tokens.append(row[0].split())
-
 
 # Clean tokens and set sentiment for each headline
 
@@ -92,6 +90,7 @@ def headline_analysis(csv_file, headlines_predicted, total_headlines_count, posi
                     if (classifier.classify(dict([token, True] for token in custom_tokens))== "Positive"):
                         positive_headlines_count += 1
     return (headlines_predicted, total_headlines_count, positive_headlines_count)
+    
 # Combine data and randomly split
 # Create model with training data then test
 
@@ -128,9 +127,6 @@ while(current_month_str < "2022-10-01"):
         sentiment_price_pairs.update({current_month_str:positive_percentage})
     current_month = current_month + relativedelta(months=1)
 print("Headlines Predicted: ", headlines_predicted)
-
-
-
  
 # Create lists of X and Y values for the TSLA stock prices and dates
  
