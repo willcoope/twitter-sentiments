@@ -48,6 +48,14 @@ for index, row in df.iterrows():
     if (row[0] == "negative"):
         negative_headline_tokens.append(row[1].split())
 
+df = pd.read_csv('all-data2.csv', encoding = "ISO-8859-1")
+df.reset_index()
+for index, row in df.iterrows():
+    if (row[1] == "positive"):
+        positive_headline_tokens.append(row[0].split())
+    if (row[1] == "negative"):
+        negative_headline_tokens.append(row[0].split())
+
 # Clean tokens and set sentiment for each headline
 
 own_positive_cleaned_tokens_list = []
@@ -72,8 +80,8 @@ negative_dataset = [(headline, "Negative")
 dataset = positive_dataset + negative_dataset
 print("Dataset Length:", len(dataset))
 random.shuffle(dataset)
-train_data = dataset[:1800]
-test_data = dataset[1800:]
+train_data = dataset[:3750]
+test_data = dataset[3750:]
 classifier = NaiveBayesClassifier.train(train_data)
 print("Accuracy is:", classify.accuracy(classifier, test_data))
 print(classifier.show_most_informative_features(25))
