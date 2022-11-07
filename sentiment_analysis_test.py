@@ -162,7 +162,7 @@ for k, v in sentiment_price_pairs.items():
 
 # Create figure and axis objects with subplots()
 fig,ax=plt.subplots()
-ax.plot(x1, y1, color = 'g', label = "Stock Price")
+ax.plot(x1, y1, color = 'r', label = "Stock Price")
 ax.set_xlabel("Date")
 ax.set_ylabel("Price")
 
