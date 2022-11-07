@@ -136,7 +136,7 @@ while(current_month_str < "2022-10-01"):
         positive_percentage = (positive_headlines_count / total_headlines_count)*100
         sentiment_price_pairs.update({current_month_str:positive_percentage})
     current_month = current_month + relativedelta(months=1)
-#print(sentiment_price_pairs)
+print(sentiment_price_pairs)
 print("Headlines Predicted: ", headlines_predicted)
  
 # Create lists of X and Y values for the TSLA stock prices and dates
@@ -148,7 +148,7 @@ with open('TSLA_monthly.csv') as file_obj:
     # Create reader object by passing the file object to reader method
     reader_obj = csv.reader(file_obj)
     for row in reader_obj:
-        if (row[0] >= "2015-01-01"):
+        if (row[0] >= "2013-01-01"):
             x1.append(row[0])
             y1.append(float(row[4]))
 
@@ -164,11 +164,11 @@ for k, v in sentiment_price_pairs.items():
 fig,ax=plt.subplots()
 ax.plot(x1, y1, color = 'r', label = "Stock Price")
 ax.set_xlabel("Date")
-ax.set_ylabel("Price")
+ax.set_ylabel("Price", color = "r", fontsize = 14)
 
 # make a plot with different y-axis using second axis object
 ax2=ax.twinx()
 ax2.bar(x2, y2, color = 'b', label = "Sentiment", alpha = 0.5)
 ax2.set_ylabel("Sentiment Percentage",color="b",fontsize=14)
-ax.tick_params(axis = "x", rotation = 90, labelsize = 2)
+ax.tick_params(axis = "x", rotation = 90, labelsize = 5)
 plt.show()
