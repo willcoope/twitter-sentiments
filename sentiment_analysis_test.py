@@ -4,6 +4,7 @@ from nltk.tag import pos_tag
 from nltk.tokenize import word_tokenize
 from nltk import classify, NaiveBayesClassifier
 import re, string, random
+import matplotlib.pyplot as plt
 import csv
 import pandas as pd
 import datetime
@@ -130,5 +131,62 @@ while(current_month_str < "2022-10-01"):
                 #print("Positive percentage for ", current_month_str ,": ", positive_percentage)
                 sentiment_price_pairs.update({current_month_str:positive_percentage})
             current_month = current_month + relativedelta(months=1)
-print(sentiment_price_pairs)
+#print(sentiment_price_pairs)
 
+
+
+ 
+x1 = []
+y1 = []
+  
+with open('TSLA_monthly.csv') as file_obj:
+    next(file_obj)
+    # Create reader object by passing the file object to reader method
+    reader_obj = csv.reader(file_obj)
+    for row in reader_obj:
+        if (row[0] >= "2015-01-01"):
+        #print((row[0]))
+            x1.append(row[0])
+            y1.append(float(row[4]))
+print(x1)
+print(y1)
+  
+x2 = []
+y2 = []
+for k, v in sentiment_price_pairs.items():
+    x2.append(k)
+    y2.append(v)
+print(x2)
+print(y2)
+# create figure and axis objects with subplots()
+fig,ax=plt.subplots()
+ax.plot(x1, y1, color = 'g', label = "Stock Price")
+ax.set_xlabel("Date")
+ax.set_ylabel("Price")
+
+# # twin object for two different y-axis on the sample plot
+ax2=ax.twinx()
+# # make a plot with different y-axis using second axis object
+ax2.bar(x2, y2, color = 'b', label = "Sentiment")
+ax2.set_ylabel("Sentiment Percentage",color="b",fontsize=14)
+# #plt.show()
+# # save the plot as a file
+# # fig.savefig('two_different_y_axis_for_single_python_plot_with_twinx.jpg',
+# #             format='jpeg',
+# #             dpi=100,
+# #             bbox_inches='tight')
+# #ticks = []
+ax.tick_params(axis = "x", rotation = 90, labelsize = 2)
+plt.show()
+
+# plt.plot(x1, y1, color = 'g', label = "Price")
+# plt.bar(x2, y2, color = 'r', label = "Sentiment")
+# ticks = []
+# plt.xticks(rotation=45)
+# plt.tight_layout()
+# plt.xlabel('Date')
+# plt.tick_params(labelsize=4)
+# plt.ylabel('Price')
+# plt.title('Stock Price')
+# plt.legend()
+# plt.show()
