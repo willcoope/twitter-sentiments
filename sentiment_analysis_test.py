@@ -36,6 +36,7 @@ def get_headlines_for_model(cleaned_tokens_list):
     for news_tokens in cleaned_tokens_list:
         yield dict([token, True] for token in news_tokens)
 
+
 # Scrape data from csv file and separate by sentiment
 
 positive_headline_tokens = []
@@ -75,6 +76,22 @@ positive_dataset = [(headline, "Positive")
 negative_dataset = [(headline, "Negative")
                      for headline in get_headlines_for_model(own_negative_cleaned_tokens_list)]
 
+# Function that checks the month of all data in a csv
+# If the month is correct and headline is classified as positive,
+# Increment positive count by 1.
+
+def headline_analysis(csv_file, headlines_predicted, total_headlines_count, positive_headlines_count):
+    with open(csv_file) as file_obj:
+    # Create reader object by passing the file object to reader method
+            reader_obj = csv.reader(file_obj)
+            for row in reader_obj:
+                if(row[2] > current_month_str and row [2] < next_month_str):
+                    total_headlines_count += 1
+                    headlines_predicted += 1
+                    custom_tokens = remove_noise(word_tokenize(row[3]))
+                    if (classifier.classify(dict([token, True] for token in custom_tokens))== "Positive"):
+                        positive_headlines_count += 1
+    return (headlines_predicted, total_headlines_count, positive_headlines_count)
 # Combine data and randomly split
 # Create model with training data then test
 
@@ -100,43 +117,20 @@ while(current_month_str < "2022-10-01"):
     next_month_str = next_month.strftime("%Y-%m-%d")
     total_headlines_count = 0
     positive_headlines_count = 0
-    with open('CNBC_tesla_tweets.csv') as file_obj:
-    # Create reader object by passing the file object to reader method
-            reader_obj = csv.reader(file_obj)
-            for row in reader_obj:
-                if(row[2] > current_month_str and row [2] < next_month_str):
-                    total_headlines_count += 1
-                    headlines_predicted += 1
-                    custom_tokens = remove_noise(word_tokenize(row[3]))
-                    if (classifier.classify(dict([token, True] for token in custom_tokens))== "Positive"):
-                        positive_headlines_count += 1
-    with open('FT_tesla_tweets.csv') as file_obj:
-    # Create reader object by passing the file object to reader method
-            reader_obj = csv.reader(file_obj)
-            for row in reader_obj:
-                if(row[2] > current_month_str and row [2] < next_month_str):
-                    total_headlines_count += 1
-                    headlines_predicted += 1
-                    custom_tokens = remove_noise(word_tokenize(row[3]))
-                    if (classifier.classify(dict([token, True] for token in custom_tokens))== "Positive"):
-                        positive_headlines_count += 1
-    with open('Reuters_tesla_tweets.csv') as file_obj:
-    # Create reader object by passing the file object to reader method
-            reader_obj = csv.reader(file_obj)
-            for row in reader_obj:
-                if(row[2] > current_month_str and row [2] < next_month_str):
-                    total_headlines_count += 1
-                    headlines_predicted += 1
-                    custom_tokens = remove_noise(word_tokenize(row[3]))
-                    if (classifier.classify(dict([token, True] for token in custom_tokens))== "Positive"):
-                        positive_headlines_count += 1
-    if (total_headlines_count == 0 or positive_headlines_count == 0):
+    output = headline_analysis('CNBC_tesla_tweets.csv', headlines_predicted, 0, 0)
+    output = headline_analysis('FT_tesla_tweets.csv', output [0], output [1], output [2])
+    output = headline_analysis('Reuters_tesla_tweets.csv', output [0], output [1], output [2])
+    headlines_predicted = output [0]
+    if (output[1] == 0 or output[2] == 0):
         sentiment_price_pairs.update({current_month_str:0})
     else:
-        positive_percentage = (positive_headlines_count / total_headlines_count)*100
+        positive_percentage = (output[2] / output[1])*100
         sentiment_price_pairs.update({current_month_str:positive_percentage})
     current_month = current_month + relativedelta(months=1)
 print("Headlines Predicted: ", headlines_predicted)
+
+
+
  
 # Create lists of X and Y values for the TSLA stock prices and dates
  
