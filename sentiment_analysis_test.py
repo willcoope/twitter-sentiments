@@ -136,7 +136,6 @@ while(current_month_str < "2022-10-01"):
         positive_percentage = (positive_headlines_count / total_headlines_count)*100
         sentiment_price_pairs.update({current_month_str:positive_percentage})
     current_month = current_month + relativedelta(months=1)
-print(sentiment_price_pairs)
 print("Headlines Predicted: ", headlines_predicted)
  
 # Create lists of X and Y values for the TSLA stock prices and dates
@@ -162,11 +161,15 @@ for k, v in sentiment_price_pairs.items():
 
 # Create figure and axis objects with subplots()
 fig,ax=plt.subplots()
+
+# Make a plot for the stock price line chart
+
 ax.plot(x1, y1, color = 'r', label = "Stock Price")
 ax.set_xlabel("Date")
 ax.set_ylabel("Price", color = "r", fontsize = 14)
 
-# make a plot with different y-axis using second axis object
+# Make a plot with different y-axis using second axis object for the sentiment bar chart
+
 ax2=ax.twinx()
 ax2.bar(x2, y2, color = 'b', label = "Sentiment", alpha = 0.5)
 ax2.set_ylabel("Sentiment Percentage",color="b",fontsize=14)
