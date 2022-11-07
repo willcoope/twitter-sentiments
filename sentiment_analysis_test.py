@@ -90,15 +90,15 @@ def headline_analysis(csv_file, headlines_predicted, total_headlines_count, posi
                     if (classifier.classify(dict([token, True] for token in custom_tokens))== "Positive"):
                         positive_headlines_count += 1
     return (headlines_predicted, total_headlines_count, positive_headlines_count)
-    
+
 # Combine data and randomly split
 # Create model with training data then test
 
 dataset = positive_dataset + negative_dataset
 print("Dataset Length:", len(dataset))
 random.shuffle(dataset)
-train_data = dataset[:3750]
-test_data = dataset[3750:]
+train_data = dataset[:4100]
+test_data = dataset[4100:]
 classifier = NaiveBayesClassifier.train(train_data)
 print("Accuracy is:", classify.accuracy(classifier, test_data))
 print(classifier.show_most_informative_features(25))
