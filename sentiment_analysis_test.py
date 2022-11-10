@@ -156,12 +156,12 @@ fig,ax=plt.subplots()
 
 ax.plot(x1, y1, color = 'r', label = "Stock Price")
 ax.set_xlabel("Date")
-ax.set_ylabel("Price", color = "r", fontsize = 14)
+ax.set_ylabel("Stock Price (USD)", color = "r", fontsize = 14)
 
 # Make a plot with different y-axis using second axis object for the sentiment bar chart
 
 ax2=ax.twinx()
 ax2.bar(x2, y2, color = 'b', label = "Sentiment", alpha = 0.5)
-ax2.set_ylabel("Sentiment Percentage",color="b",fontsize=14)
-ax.tick_params(axis = "x", rotation = 90, labelsize = 5)
+ax2.set_ylabel("Positive Sentiment Each Month (%)",color="b",fontsize=14)
+ax.tick_params(axis = "x", rotation = 90, labelsize = 3)
 plt.show()
