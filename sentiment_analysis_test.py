@@ -150,6 +150,7 @@ for k, v in sentiment_price_pairs.items():
     y2.append(v)
 
 # Create figure and axis objects with subplots()
+
 fig,ax=plt.subplots()
 
 # Make a plot for the stock price line chart
