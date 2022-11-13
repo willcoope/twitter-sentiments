@@ -122,14 +122,14 @@ while(current_month_str < "2022-10-01"):
     monthly_positive_headlines_count = 0
     monthly_negative_headlines_count = 0
     output = headline_analysis('CNBC_tesla_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    print("Monthly Headlines:", output[1])
-    print("Total Headlines:", output[0])
+    #print("Monthly Headlines:", output[1])
+    #print("Total Headlines:", output[0])
     output = headline_analysis('FT_tesla_tweets.csv', output [0], output [1], output [2], output[3])
-    print("Monthly Headlines:", output[1])
-    print("Total Headlines:", output[0])
+    #print("Monthly Headlines:", output[1])
+    #print("Total Headlines:", output[0])
     output = headline_analysis('Reuters_tesla_tweets.csv', output [0], output [1], output [2], output[3])
-    print("Monthly Headlines:", output[1])
-    print("Total Headlines:", output[0])
+    #print("Monthly Headlines:", output[1])
+    #print("Total Headlines:", output[0])
     total_headlines_predicted = output [0]
     if (output[1] == 0):
         percentage_sentiment_price_pairs.update({current_month_str:0})
@@ -137,15 +137,15 @@ while(current_month_str < "2022-10-01"):
     else:
         positive_percentage = (output[2] / output[1])*100
         net_sentiment = output[2] - output[3]
-        print(current_month_str, "monthly_positive_headlines_count", output[2])
-        print(current_month_str, "monthly_negative_headlines_count", output[3])
-        print(current_month_str, "Net Sentiment:", net_sentiment)
+        #print(current_month_str, "monthly_positive_headlines_count", output[2])
+        #print(current_month_str, "monthly_negative_headlines_count", output[3])
+        #print(current_month_str, "Net Sentiment:", net_sentiment)
         percentage_sentiment_price_pairs.update({current_month_str:positive_percentage})
         net_sentiment_price_pairs.update({current_month_str:net_sentiment})
     current_month = current_month + relativedelta(months=1)
-print("Headlines Predicted: ", total_headlines_predicted)
-print("net_sentiment_price_pairs")
-print(net_sentiment_price_pairs)
+#print("Headlines Predicted: ", total_headlines_predicted)
+#print("net_sentiment_price_pairs")
+#(net_sentiment_price_pairs)
  
 # Create lists of X and Y values for the TSLA stock prices and dates
  
@@ -197,3 +197,22 @@ plt.show()
 # ax.bar(x, negative_data, width=1, color='r')
 # ax.bar(x, positive_data, width=1, color='b')
 # plt.show()
+
+x3 = []
+y3 = []
+for k, v in net_sentiment_price_pairs.items():
+    x3.append(k)
+    y3.append(v)
+
+fig,ax=plt.subplots()
+
+# Make a plot for the stock price line chart
+
+ax.plot(x1, y1, color = 'r', label = "Stock Price")
+ax.set_xlabel("Date")
+ax.set_ylabel("Stock Price (USD)", color = "r", fontsize = 14)
+ax2=ax.twinx()
+ax2.bar(x3, y3, color = 'b', label = "Sentiment", alpha = 0.5)
+ax2.set_ylabel("Net Sentiment Per Month",color="b",fontsize=14)
+ax.tick_params(axis = "x", rotation = 90, labelsize = 3)
+plt.show()
