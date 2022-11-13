@@ -78,18 +78,20 @@ negative_dataset = [(headline, "Negative")
 # If the month is correct and headline is classified as positive,
 # Increment positive count by 1.
 
-def headline_analysis(csv_file, headlines_predicted, total_headlines_count, positive_headlines_count):
+def headline_analysis(csv_file, total_headlines_predicted, monthly_headlines_count, monthly_positive_headlines_count, monthly_negative_headlines_count):
     with open(csv_file) as file_obj:
     # Create reader object by passing the file object to reader method
             reader_obj = csv.reader(file_obj)
             for row in reader_obj:
                 if(row[2] > current_month_str and row [2] < next_month_str):
-                    total_headlines_count += 1
-                    headlines_predicted += 1
+                    monthly_headlines_count += 1
+                    total_headlines_predicted += 1
                     custom_tokens = remove_noise(word_tokenize(row[3]))
                     if (classifier.classify(dict([token, True] for token in custom_tokens))== "Positive"):
-                        positive_headlines_count += 1
-    return (headlines_predicted, total_headlines_count, positive_headlines_count)
+                        monthly_positive_headlines_count += 1
+                    if (classifier.classify(dict([token, True] for token in custom_tokens))== "Negative"):
+                        monthly_negative_headlines_count += 1
+    return (total_headlines_predicted, monthly_headlines_count, monthly_positive_headlines_count, monthly_negative_headlines_count)
 
 # Combine data and randomly split
 # Create model with training data then test
@@ -106,27 +108,44 @@ print(classifier.show_most_informative_features(25))
 # Separate tweets into months and creates pairs of values
 # Each month has a corresponding percentage of tweets that are positive
 
-sentiment_price_pairs = {}
+percentage_sentiment_price_pairs = {}
+net_sentiment_price_pairs = {}
+
 current_month = datetime(2013,1,1)
 current_month_str = current_month.strftime("%Y-%m-%d")
-headlines_predicted = 0
+total_headlines_predicted = 0
 while(current_month_str < "2022-10-01"):
     next_month = current_month + relativedelta(months=1)
     current_month_str = current_month.strftime("%Y-%m-%d")
     next_month_str = next_month.strftime("%Y-%m-%d")
-    total_headlines_count = 0
-    positive_headlines_count = 0
-    output = headline_analysis('CNBC_tesla_tweets.csv', headlines_predicted, 0, 0)
-    output = headline_analysis('FT_tesla_tweets.csv', output [0], output [1], output [2])
-    output = headline_analysis('Reuters_tesla_tweets.csv', output [0], output [1], output [2])
-    headlines_predicted = output [0]
-    if (output[1] == 0 or output[2] == 0):
-        sentiment_price_pairs.update({current_month_str:0})
+    monthly_headlines_count = 0
+    monthly_positive_headlines_count = 0
+    monthly_negative_headlines_count = 0
+    output = headline_analysis('CNBC_tesla_tweets.csv', total_headlines_predicted, 0, 0, 0)
+    print("Monthly Headlines:", output[1])
+    print("Total Headlines:", output[0])
+    output = headline_analysis('FT_tesla_tweets.csv', output [0], output [1], output [2], output[3])
+    print("Monthly Headlines:", output[1])
+    print("Total Headlines:", output[0])
+    output = headline_analysis('Reuters_tesla_tweets.csv', output [0], output [1], output [2], output[3])
+    print("Monthly Headlines:", output[1])
+    print("Total Headlines:", output[0])
+    total_headlines_predicted = output [0]
+    if (output[1] == 0):
+        percentage_sentiment_price_pairs.update({current_month_str:0})
+        percentage_sentiment_price_pairs.update({current_month_str:0})
     else:
         positive_percentage = (output[2] / output[1])*100
-        sentiment_price_pairs.update({current_month_str:positive_percentage})
+        net_sentiment = output[2] - output[3]
+        print(current_month_str, "monthly_positive_headlines_count", output[2])
+        print(current_month_str, "monthly_negative_headlines_count", output[3])
+        print(current_month_str, "Net Sentiment:", net_sentiment)
+        percentage_sentiment_price_pairs.update({current_month_str:positive_percentage})
+        net_sentiment_price_pairs.update({current_month_str:net_sentiment})
     current_month = current_month + relativedelta(months=1)
-print("Headlines Predicted: ", headlines_predicted)
+print("Headlines Predicted: ", total_headlines_predicted)
+print("net_sentiment_price_pairs")
+print(net_sentiment_price_pairs)
  
 # Create lists of X and Y values for the TSLA stock prices and dates
  
@@ -145,7 +164,7 @@ with open('TSLA_monthly.csv') as file_obj:
 
 x2 = []
 y2 = []
-for k, v in sentiment_price_pairs.items():
+for k, v in percentage_sentiment_price_pairs.items():
     x2.append(k)
     y2.append(v)
 
@@ -166,3 +185,15 @@ ax2.bar(x2, y2, color = 'b', label = "Sentiment", alpha = 0.5)
 ax2.set_ylabel("Positive Sentiment Each Month (%)",color="b",fontsize=14)
 ax.tick_params(axis = "x", rotation = 90, labelsize = 3)
 plt.show()
+
+# Positive and Negative Bar Chart Example
+
+# x = range(7)
+# negative_data = [-1,-4,-3,-2,-6,-2,-8]
+# positive_data = [4,2,3,1,4,6,7,]
+
+# fig = plt.figure()
+# ax = plt.subplot(111)
+# ax.bar(x, negative_data, width=1, color='r')
+# ax.bar(x, positive_data, width=1, color='b')
+# plt.show()
