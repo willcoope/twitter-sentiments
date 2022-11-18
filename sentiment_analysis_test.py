@@ -78,21 +78,6 @@ negative_dataset = [(headline, "Negative")
 # If the month is correct and headline is classified as positive,
 # Increment positive count by 1.
 
-def headline_analysis(csv_file, total_headlines_predicted, monthly_headlines_count, monthly_positive_headlines_count, monthly_negative_headlines_count):
-    with open(csv_file) as file_obj:
-    # Create reader object by passing the file object to reader method
-            reader_obj = csv.reader(file_obj)
-            for row in reader_obj:
-                if(row[2] > current_month_str and row [2] < next_month_str):
-                    monthly_headlines_count += 1
-                    total_headlines_predicted += 1
-                    custom_tokens = remove_noise(word_tokenize(row[3]))
-                    if (classifier.classify(dict([token, True] for token in custom_tokens))== "Positive"):
-                        monthly_positive_headlines_count += 1
-                    if (classifier.classify(dict([token, True] for token in custom_tokens))== "Negative"):
-                        monthly_negative_headlines_count += 1
-    return (total_headlines_predicted, monthly_headlines_count, monthly_positive_headlines_count, monthly_negative_headlines_count)
-
 # Combine data and randomly split
 # Create model with training data then test
 
@@ -107,33 +92,6 @@ print(classifier.show_most_informative_features(25))
 
 # Separate tweets into months and creates pairs of values
 # Each month has a corresponding percentage of tweets that are positive
-
-percentage_sentiment_price_pairs = {}
-net_sentiment_price_pairs = {}
-
-current_month = datetime(2013,1,1)
-current_month_str = current_month.strftime("%Y-%m-%d")
-total_headlines_predicted = 0
-while(current_month_str < "2022-10-01"):
-    next_month = current_month + relativedelta(months=1)
-    current_month_str = current_month.strftime("%Y-%m-%d")
-    next_month_str = next_month.strftime("%Y-%m-%d")
-    monthly_headlines_count = 0
-    monthly_positive_headlines_count = 0
-    monthly_negative_headlines_count = 0
-    output = headline_analysis('CNBC_tesla_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    output = headline_analysis('FT_tesla_tweets.csv', output [0], output [1], output [2], output[3])
-    output = headline_analysis('Reuters_tesla_tweets.csv', output [0], output [1], output [2], output[3])
-    total_headlines_predicted = output [0]
-    if (output[1] == 0):
-        percentage_sentiment_price_pairs.update({current_month_str:0})
-        percentage_sentiment_price_pairs.update({current_month_str:0})
-    else:
-        positive_percentage = (output[2] / output[1])*100
-        net_sentiment = output[2] - output[3]
-        percentage_sentiment_price_pairs.update({current_month_str:positive_percentage})
-        net_sentiment_price_pairs.update({current_month_str:net_sentiment})
-    current_month = current_month + relativedelta(months=1)
 
 def headline_analysis_weekly(csv_file, total_headlines_predicted, weekly_headlines_count, weekly_positive_headlines_count, weekly_negative_headlines_count):
     with open(csv_file) as file_obj:
@@ -200,87 +158,6 @@ while(current_week_str < "2022-10-01"):
         amazon_weekly_net_sentiment_price_pairs.update({current_week_str:net_sentiment})
     current_week = current_week + relativedelta(weeks=1)
 
-# current_week = datetime(2013,1,1)
-# current_week_str = current_week.strftime("%Y-%m-%d")
-# total_headlines_predicted = 0
-# while(current_week_str < "2022-10-01"):
-#     next_week = current_week + relativedelta(weeks=1)
-#     current_week_str = current_week.strftime("%Y-%m-%d")
-#     next_week_str = next_week.strftime("%Y-%m-%d")
-#     weekly_headlines_count = 0
-#     weekly_positive_headlines_count = 0
-#     weekly_negative_headlines_count = 0
-#     output = headline_analysis_weekly('CNBC_amazon_tweets.csv', total_headlines_predicted, 0, 0, 0)
-#     output = headline_analysis_weekly('FT_amazon_tweets.csv', output [0], output [1], output [2], output[3])
-#     output = headline_analysis_weekly('Reuters_amazon_tweets.csv', output [0], output [1], output [2], output[3])
-#     total_headlines_predicted = output [0]
-#     if (output[1] == 0):
-#         amazon_weekly_percentage_sentiment_price_pairs.update({current_week_str:0})
-#         amazon_weekly_net_sentiment_price_pairs.update({current_week_str:0})
-#     else:
-#         positive_percentage = (output[2] / output[1])*100
-#         net_sentiment = output[2] - output[3]
-#         amazon_weekly_percentage_sentiment_price_pairs.update({current_week_str:positive_percentage})
-#         amazon_weekly_net_sentiment_price_pairs.update({current_week_str:net_sentiment})
-#     current_week = current_week + relativedelta(weeks=1)
-
-# Create lists of X and Y values for the TSLA stock prices and dates
- 
-# x1 = []
-# y1 = []
-# with open('TSLA_monthly.csv') as file_obj:
-#     next(file_obj)
-#     # Create reader object by passing the file object to reader method
-#     reader_obj = csv.reader(file_obj)
-#     for row in reader_obj:
-#         if (row[0] >= "2013-01-01"):
-#             x1.append(row[0])
-#             y1.append(float(row[4]))
-
-# # Create lists of X and Y values for positive sentiment percentages and dates
-
-# x2 = []
-# y2 = []
-# for k, v in percentage_sentiment_price_pairs.items():
-#     x2.append(k)
-#     y2.append(v)
-
-# # Create figure and axis objects with subplots()
-
-# fig,ax=plt.subplots()
-
-# # Make a plot for the stock price line chart
-
-# ax.plot(x1, y1, color = 'r', label = "Stock Price")
-# ax.set_xlabel("Date")
-# ax.set_ylabel("Stock Price (USD)", color = "r", fontsize = 14)
-
-# # Make a plot with different y-axis using second axis object for the sentiment bar chart
-
-# ax2=ax.twinx()
-# ax2.bar(x2, y2, color = 'b', label = "Sentiment", alpha = 0.5)
-# ax2.set_ylabel("Positive Sentiment Each Month (%)",color="b",fontsize=14)
-# ax.tick_params(axis = "x", rotation = 90, labelsize = 3)
-# plt.show()
-
-# x3 = []
-# y3 = []
-# for k, v in net_sentiment_price_pairs.items():
-#     x3.append(k)
-#     y3.append(v)
-
-# fig,ax=plt.subplots()
-
-# # Make a plot for the stock price line chart
-
-# ax.plot(x1, y1, color = 'r', label = "Stock Price")
-# ax.set_xlabel("Date")
-# ax.set_ylabel("Stock Price (USD)", color = "r", fontsize = 14)
-# ax2=ax.twinx()
-# ax2.bar(x3, y3, color = 'b', label = "Sentiment", alpha = 0.5)
-# ax2.set_ylabel("Net Sentiment Per Month",color="b",fontsize=14)
-# ax.tick_params(axis = "x", rotation = 90, labelsize = 3)
-# plt.show()
 
 # Tesla Weekly Graphs
 ########################################################################
