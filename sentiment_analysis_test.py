@@ -263,6 +263,7 @@ ax2.set_ylabel("Net Sentiment Per Month",color="b",fontsize=14)
 ax.tick_params(axis = "x", rotation = 90, labelsize = 3)
 plt.show()
 
+# Weekly Graphs
 ########################################################################
 
 x1 = []
@@ -286,19 +287,16 @@ for k, v in weekly_percentage_sentiment_price_pairs.items():
 fig,ax=plt.subplots()
 
 # Make a plot for the stock price line chart
-
 ax.plot(x1, y1, color = 'r', label = "Stock Price")
 ax.set_xlabel("Date")
 ax.set_ylabel("Stock Price (USD)", color = "r", fontsize = 14)
-# ax.set_ylabel("Positive Sentiment Each Week (%)",color="b",fontsize=14)
-ax.tick_params(axis = "x", rotation = 90, labelsize = 2)
 
 # Make a plot with different y-axis using second axis object for the sentiment bar chart
 
 ax2=ax.twinx()
 ax2.bar(x2, y2, color = 'b', label = "Sentiment", alpha = 0.5)
 ax2.set_ylabel("Positive Sentiment Each Week (%)",color="b",fontsize=14)
-ax.tick_params(axis = "x", rotation = 90, labelsize = 3)
+ax.tick_params(axis = "x", rotation = 90, labelsize = 2)
 plt.show()
 
 x3 = []
@@ -308,10 +306,10 @@ for k, v in weekly_net_sentiment_price_pairs.items():
     y3.append(v)
 
 fig,ax=plt.subplots()
-
 ax.plot(x1, y1, color = 'r', label = "Stock Price")
 ax.set_xlabel("Date")
 ax.set_ylabel("Stock Price (USD)", color = "r", fontsize = 14)
+
 ax2=ax.twinx()
 ax2.bar(x3, y3, color = 'b', label = "Sentiment", alpha = 0.5)
 ax2.set_ylabel("Net Sentiment Per Week",color="b",fontsize=14)
