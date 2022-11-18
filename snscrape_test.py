@@ -21,4 +21,4 @@ for account in accounts_list:
             # Create dataframe from the tweets_list above
             tweets_df = pd.DataFrame(tweets_list, columns=['Username', 'Datetime', 'Text'])
             # Convert dataframe to CSV file with custom name
-            tweets_df.to_csv(account + '_amazon_tweets.csv')
+            tweets_df.to_csv(account + '_'+ stock +'_tweets.csv')
