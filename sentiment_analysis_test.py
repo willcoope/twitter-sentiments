@@ -163,9 +163,7 @@ while(current_week_str < "2022-10-01"):
     weekly_headlines_count = 0
     weekly_positive_headlines_count = 0
     weekly_negative_headlines_count = 0
-    output = headline_analysis_weekly('CNBC_tesla_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    output = headline_analysis_weekly('FT_tesla_tweets.csv', output [0], output [1], output [2], output[3])
-    output = headline_analysis_weekly('Reuters_tesla_tweets.csv', output [0], output [1], output [2], output[3])
+    output = headline_analysis_weekly('Tesla_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
     total_headlines_predicted = output [0]
     if (output[1] == 0):
         tesla_weekly_percentage_sentiment_price_pairs.update({current_week_str:0})
@@ -190,9 +188,7 @@ while(current_week_str < "2022-10-01"):
     weekly_headlines_count = 0
     weekly_positive_headlines_count = 0
     weekly_negative_headlines_count = 0
-    output = headline_analysis_weekly('CNBC_amazon_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    output = headline_analysis_weekly('FT_amazon_tweets.csv', output [0], output [1], output [2], output[3])
-    output = headline_analysis_weekly('Reuters_amazon_tweets.csv', output [0], output [1], output [2], output[3])
+    output = headline_analysis_weekly('Amazon_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
     total_headlines_predicted = output [0]
     if (output[1] == 0):
         amazon_weekly_percentage_sentiment_price_pairs.update({current_week_str:0})
@@ -203,6 +199,30 @@ while(current_week_str < "2022-10-01"):
         amazon_weekly_percentage_sentiment_price_pairs.update({current_week_str:positive_percentage})
         amazon_weekly_net_sentiment_price_pairs.update({current_week_str:net_sentiment})
     current_week = current_week + relativedelta(weeks=1)
+
+# current_week = datetime(2013,1,1)
+# current_week_str = current_week.strftime("%Y-%m-%d")
+# total_headlines_predicted = 0
+# while(current_week_str < "2022-10-01"):
+#     next_week = current_week + relativedelta(weeks=1)
+#     current_week_str = current_week.strftime("%Y-%m-%d")
+#     next_week_str = next_week.strftime("%Y-%m-%d")
+#     weekly_headlines_count = 0
+#     weekly_positive_headlines_count = 0
+#     weekly_negative_headlines_count = 0
+#     output = headline_analysis_weekly('CNBC_amazon_tweets.csv', total_headlines_predicted, 0, 0, 0)
+#     output = headline_analysis_weekly('FT_amazon_tweets.csv', output [0], output [1], output [2], output[3])
+#     output = headline_analysis_weekly('Reuters_amazon_tweets.csv', output [0], output [1], output [2], output[3])
+#     total_headlines_predicted = output [0]
+#     if (output[1] == 0):
+#         amazon_weekly_percentage_sentiment_price_pairs.update({current_week_str:0})
+#         amazon_weekly_net_sentiment_price_pairs.update({current_week_str:0})
+#     else:
+#         positive_percentage = (output[2] / output[1])*100
+#         net_sentiment = output[2] - output[3]
+#         amazon_weekly_percentage_sentiment_price_pairs.update({current_week_str:positive_percentage})
+#         amazon_weekly_net_sentiment_price_pairs.update({current_week_str:net_sentiment})
+#     current_week = current_week + relativedelta(weeks=1)
 
 # Create lists of X and Y values for the TSLA stock prices and dates
  
