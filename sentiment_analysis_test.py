@@ -122,14 +122,8 @@ while(current_month_str < "2022-10-01"):
     monthly_positive_headlines_count = 0
     monthly_negative_headlines_count = 0
     output = headline_analysis('CNBC_tesla_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    #print("Monthly Headlines:", output[1])
-    #print("Total Headlines:", output[0])
     output = headline_analysis('FT_tesla_tweets.csv', output [0], output [1], output [2], output[3])
-    #print("Monthly Headlines:", output[1])
-    #print("Total Headlines:", output[0])
     output = headline_analysis('Reuters_tesla_tweets.csv', output [0], output [1], output [2], output[3])
-    #print("Monthly Headlines:", output[1])
-    #print("Total Headlines:", output[0])
     total_headlines_predicted = output [0]
     if (output[1] == 0):
         percentage_sentiment_price_pairs.update({current_month_str:0})
@@ -137,15 +131,9 @@ while(current_month_str < "2022-10-01"):
     else:
         positive_percentage = (output[2] / output[1])*100
         net_sentiment = output[2] - output[3]
-        #print(current_month_str, "monthly_positive_headlines_count", output[2])
-        #print(current_month_str, "monthly_negative_headlines_count", output[3])
-        #print(current_month_str, "Net Sentiment:", net_sentiment)
         percentage_sentiment_price_pairs.update({current_month_str:positive_percentage})
         net_sentiment_price_pairs.update({current_month_str:net_sentiment})
     current_month = current_month + relativedelta(months=1)
-#print("Headlines Predicted: ", total_headlines_predicted)
-#print("net_sentiment_price_pairs")
-#(net_sentiment_price_pairs)
 
 def headline_analysis_weekly(csv_file, total_headlines_predicted, weekly_headlines_count, weekly_positive_headlines_count, weekly_negative_headlines_count):
     with open(csv_file) as file_obj:
@@ -168,26 +156,16 @@ weekly_net_sentiment_price_pairs = {}
 current_week = datetime(2013,1,1)
 current_week_str = current_week.strftime("%Y-%m-%d")
 total_headlines_predicted = 0
-# print("REACHED1")
-# print(current_week_str)
 while(current_week_str < "2022-10-01"):
-    # print("REACHED2")
     next_week = current_week + relativedelta(weeks=1)
     current_week_str = current_week.strftime("%Y-%m-%d")
     next_week_str = next_week.strftime("%Y-%m-%d")
-    # print(next_week_str)
     weekly_headlines_count = 0
     weekly_positive_headlines_count = 0
     weekly_negative_headlines_count = 0
     output = headline_analysis_weekly('CNBC_tesla_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    # print("Weekly Headlines:", output[1])
-    # print("Total Headlines:", output[0])
     output = headline_analysis_weekly('FT_tesla_tweets.csv', output [0], output [1], output [2], output[3])
-    # print("Weekly Headlines:", output[1])
-    # print("Total Headlines:", output[0])
     output = headline_analysis_weekly('Reuters_tesla_tweets.csv', output [0], output [1], output [2], output[3])
-    # print("Weekly Headlines:", output[1])
-    # print("Total Headlines:", output[0])
     total_headlines_predicted = output [0]
     if (output[1] == 0):
         weekly_percentage_sentiment_price_pairs.update({current_week_str:0})
@@ -195,16 +173,10 @@ while(current_week_str < "2022-10-01"):
     else:
         positive_percentage = (output[2] / output[1])*100
         net_sentiment = output[2] - output[3]
-        #print(current_month_str, "monthly_positive_headlines_count", output[2])
-        #print(current_month_str, "monthly_negative_headlines_count", output[3])
-        #print(current_month_str, "Net Sentiment:", net_sentiment)
         weekly_percentage_sentiment_price_pairs.update({current_week_str:positive_percentage})
         weekly_net_sentiment_price_pairs.update({current_week_str:net_sentiment})
     current_week = current_week + relativedelta(weeks=1)
-# print("Headlines Predicted: ", total_headlines_predicted)
-# print("weekly percentage sentiment price pairs")
-# print(weekly_percentage_sentiment_price_pairs)
- 
+
 # Create lists of X and Y values for the TSLA stock prices and dates
  
 x1 = []
