@@ -93,7 +93,7 @@ print(classifier.show_most_informative_features(25))
 # Separate tweets into months and creates pairs of values
 # Each month has a corresponding percentage of tweets that are positive
 
-def headline_analysis_weekly(csv_file, total_headlines_predicted, weekly_headlines_count, weekly_positive_headlines_count, weekly_negative_headlines_count):
+def headline_analysis(csv_file, total_headlines_predicted, weekly_headlines_count, weekly_positive_headlines_count, weekly_negative_headlines_count):
     with open(csv_file) as file_obj:
     # Create reader object by passing the file object to reader method
             reader_obj = csv.reader(file_obj)
@@ -121,7 +121,7 @@ while(current_week_str < "2022-10-01"):
     weekly_headlines_count = 0
     weekly_positive_headlines_count = 0
     weekly_negative_headlines_count = 0
-    output = headline_analysis_weekly('Tesla_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
+    output = headline_analysis('Tesla_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
     total_headlines_predicted = output [0]
     if (output[1] == 0):
         tesla_weekly_percentage_sentiment_price_pairs.update({current_week_str:0})
@@ -146,7 +146,7 @@ while(current_week_str < "2022-10-01"):
     weekly_headlines_count = 0
     weekly_positive_headlines_count = 0
     weekly_negative_headlines_count = 0
-    output = headline_analysis_weekly('Amazon_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
+    output = headline_analysis('Amazon_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
     total_headlines_predicted = output [0]
     if (output[1] == 0):
         amazon_weekly_percentage_sentiment_price_pairs.update({current_week_str:0})
