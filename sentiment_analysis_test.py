@@ -108,6 +108,18 @@ def headline_analysis(csv_file, total_headlines_predicted, weekly_headlines_coun
                         weekly_negative_headlines_count += 1
     return (total_headlines_predicted, weekly_headlines_count, weekly_positive_headlines_count, weekly_negative_headlines_count)
 
+def data_plot(total_headlines_predicted, analysis_output, weekly_percentage_sentiment_price_pairs, weekly_net_sentiment_price_pairs):
+    total_headlines_predicted = analysis_output [0]
+    if (analysis_output[1] == 0):
+        weekly_percentage_sentiment_price_pairs.update({current_week_str:0})
+        weekly_net_sentiment_price_pairs.update({current_week_str:0})
+    else:
+        positive_percentage = (analysis_output[2] / analysis_output[1])*100
+        net_sentiment = analysis_output[2] - analysis_output[3]
+        weekly_percentage_sentiment_price_pairs.update({current_week_str:positive_percentage})
+        weekly_net_sentiment_price_pairs.update({current_week_str:net_sentiment})
+    return total_headlines_predicted
+
 tesla_weekly_percentage_sentiment_price_pairs = {}
 tesla_weekly_net_sentiment_price_pairs = {}
 
@@ -121,28 +133,11 @@ while(current_week_str < "2022-10-01"):
     next_week = current_week + relativedelta(weeks=1)
     current_week_str = current_week.strftime("%Y-%m-%d")
     next_week_str = next_week.strftime("%Y-%m-%d")
-    output = headline_analysis('Tesla_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    total_headlines_predicted = output [0]
-    if (output[1] == 0):
-        tesla_weekly_percentage_sentiment_price_pairs.update({current_week_str:0})
-        tesla_weekly_net_sentiment_price_pairs.update({current_week_str:0})
-    else:
-        positive_percentage = (output[2] / output[1])*100
-        net_sentiment = output[2] - output[3]
-        tesla_weekly_percentage_sentiment_price_pairs.update({current_week_str:positive_percentage})
-        tesla_weekly_net_sentiment_price_pairs.update({current_week_str:net_sentiment})
-    output = headline_analysis('Amazon_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    total_headlines_predicted = output [0]
-    if (output[1] == 0):
-        amazon_weekly_percentage_sentiment_price_pairs.update({current_week_str:0})
-        amazon_weekly_net_sentiment_price_pairs.update({current_week_str:0})
-    else:
-        positive_percentage = (output[2] / output[1])*100
-        net_sentiment = output[2] - output[3]
-        amazon_weekly_percentage_sentiment_price_pairs.update({current_week_str:positive_percentage})
-        amazon_weekly_net_sentiment_price_pairs.update({current_week_str:net_sentiment})
+    analysis_output = headline_analysis('Tesla_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
+    total_headlines_predicted = data_plot(total_headlines_predicted, analysis_output, tesla_weekly_percentage_sentiment_price_pairs, tesla_weekly_net_sentiment_price_pairs)
+    analysis_output = headline_analysis('Amazon_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
+    total_headlines_predicted = data_plot(total_headlines_predicted, analysis_output, amazon_weekly_percentage_sentiment_price_pairs, amazon_weekly_net_sentiment_price_pairs)
     current_week = current_week + relativedelta(weeks=1)
-
 print("Total Headlines Predicted:", total_headlines_predicted)
 
 # Tesla Weekly Graphs
