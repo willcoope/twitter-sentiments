@@ -98,6 +98,7 @@ def headline_analysis(csv_file, total_headlines_predicted, weekly_headlines_coun
     # Create reader object by passing the file object to reader method
             reader_obj = csv.reader(file_obj)
             for row in reader_obj:
+                #print(row)
                 if(row[2] > current_week_str and row [2] < next_week_str):
                     weekly_headlines_count += 1
                     total_headlines_predicted += 1
@@ -126,6 +127,13 @@ tesla_weekly_net_sentiment_price_pairs = {}
 amazon_weekly_percentage_sentiment_price_pairs = {}
 amazon_weekly_net_sentiment_price_pairs = {}
 
+netflix_weekly_percentage_sentiment_price_pairs = {}
+netflix_weekly_net_sentiment_price_pairs = {}
+
+apple_weekly_percentage_sentiment_price_pairs = {}
+apple_weekly_net_sentiment_price_pairs = {}
+
+
 current_week = datetime(2013,1,1)
 current_week_str = current_week.strftime("%Y-%m-%d")
 total_headlines_predicted = 0
@@ -133,10 +141,15 @@ while(current_week_str < "2022-10-01"):
     next_week = current_week + relativedelta(weeks=1)
     current_week_str = current_week.strftime("%Y-%m-%d")
     next_week_str = next_week.strftime("%Y-%m-%d")
+    analysis_output = headline_analysis('Apple_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
+    total_headlines_predicted = data_plot(total_headlines_predicted, analysis_output, apple_weekly_percentage_sentiment_price_pairs, apple_weekly_net_sentiment_price_pairs)
     analysis_output = headline_analysis('Tesla_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
     total_headlines_predicted = data_plot(total_headlines_predicted, analysis_output, tesla_weekly_percentage_sentiment_price_pairs, tesla_weekly_net_sentiment_price_pairs)
     analysis_output = headline_analysis('Amazon_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
     total_headlines_predicted = data_plot(total_headlines_predicted, analysis_output, amazon_weekly_percentage_sentiment_price_pairs, amazon_weekly_net_sentiment_price_pairs)
+    analysis_output = headline_analysis('Netflix_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
+    total_headlines_predicted = data_plot(total_headlines_predicted, analysis_output, netflix_weekly_percentage_sentiment_price_pairs, netflix_weekly_net_sentiment_price_pairs)
+    
     current_week = current_week + relativedelta(weeks=1)
 print("Total Headlines Predicted:", total_headlines_predicted)
 
