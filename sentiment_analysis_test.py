@@ -258,3 +258,109 @@ ax2.bar(x3, y3, color = 'b', label = "Sentiment", alpha = 0.5)
 ax2.set_ylabel("Amazon Net Sentiment Per Week",color="b",fontsize=14)
 ax.tick_params(axis = "x", rotation = 90, labelsize = 3)
 plt.show()
+
+# Netflix Weekly Graphs
+########################################################################
+
+x1 = []
+y1 = []
+with open('NFLX_weekly.csv') as file_obj:
+    next(file_obj)
+    # Create reader object by passing the file object to reader method
+    reader_obj = csv.reader(file_obj)
+    for row in reader_obj:
+        if (row[0] >= "2013-01-01"):
+            x1.append(row[0])
+            y1.append(float(row[4]))
+x2 = []
+y2 = []
+for k, v in netflix_weekly_percentage_sentiment_price_pairs.items():
+    x2.append(k)
+    y2.append(v)
+
+# Create figure and axis objects with subplots()
+
+fig,ax=plt.subplots()
+
+# Make a plot for the stock price line chart
+ax.plot(x1, y1, color = 'r', label = "Stock Price")
+ax.set_xlabel("Date")
+ax.set_ylabel("NFLX Stock Price (USD)", color = "r", fontsize = 14)
+
+# Make a plot with different y-axis using second axis object for the sentiment bar chart
+
+ax2=ax.twinx()
+ax2.bar(x2, y2, color = 'b', label = "Sentiment", alpha = 0.5)
+ax2.set_ylabel("Netflix Positive Sentiment Each Week (%)",color="b",fontsize=14)
+ax.tick_params(axis = "x", rotation = 90, labelsize = 2)
+plt.show()
+
+x3 = []
+y3 = []
+for k, v in netflix_weekly_net_sentiment_price_pairs.items():
+    x3.append(k)
+    y3.append(v)
+
+fig,ax=plt.subplots()
+ax.plot(x1, y1, color = 'r', label = "Stock Price")
+ax.set_xlabel("Date")
+ax.set_ylabel("NFLX Stock Price (USD)", color = "r", fontsize = 14)
+
+ax2=ax.twinx()
+ax2.bar(x3, y3, color = 'b', label = "Sentiment", alpha = 0.5)
+ax2.set_ylabel("Netflix Net Sentiment Per Week",color="b",fontsize=14)
+ax.tick_params(axis = "x", rotation = 90, labelsize = 3)
+plt.show()
+
+# Apple Weekly Graphs
+########################################################################
+
+x1 = []
+y1 = []
+with open('AAPL_weekly.csv') as file_obj:
+    next(file_obj)
+    # Create reader object by passing the file object to reader method
+    reader_obj = csv.reader(file_obj)
+    for row in reader_obj:
+        if (row[0] >= "2013-01-01"):
+            x1.append(row[0])
+            y1.append(float(row[4]))
+x2 = []
+y2 = []
+for k, v in apple_weekly_percentage_sentiment_price_pairs.items():
+    x2.append(k)
+    y2.append(v)
+
+# Create figure and axis objects with subplots()
+
+fig,ax=plt.subplots()
+
+# Make a plot for the stock price line chart
+ax.plot(x1, y1, color = 'r', label = "Stock Price")
+ax.set_xlabel("Date")
+ax.set_ylabel("AAPL Stock Price (USD)", color = "r", fontsize = 14)
+
+# Make a plot with different y-axis using second axis object for the sentiment bar chart
+
+ax2=ax.twinx()
+ax2.bar(x2, y2, color = 'b', label = "Sentiment", alpha = 0.5)
+ax2.set_ylabel("Apple Positive Sentiment Each Week (%)",color="b",fontsize=14)
+ax.tick_params(axis = "x", rotation = 90, labelsize = 2)
+plt.show()
+
+x3 = []
+y3 = []
+for k, v in apple_weekly_net_sentiment_price_pairs.items():
+    x3.append(k)
+    y3.append(v)
+
+fig,ax=plt.subplots()
+ax.plot(x1, y1, color = 'r', label = "Stock Price")
+ax.set_xlabel("Date")
+ax.set_ylabel("AAPL Stock Price (USD)", color = "r", fontsize = 14)
+
+ax2=ax.twinx()
+ax2.bar(x3, y3, color = 'b', label = "Sentiment", alpha = 0.5)
+ax2.set_ylabel("Apple Net Sentiment Per Week",color="b",fontsize=14)
+ax.tick_params(axis = "x", rotation = 90, labelsize = 3)
+plt.show()
