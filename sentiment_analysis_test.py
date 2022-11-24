@@ -109,7 +109,7 @@ def headline_analysis(csv_file, total_headlines_predicted, weekly_headlines_coun
                         weekly_negative_headlines_count += 1
     return (total_headlines_predicted, weekly_headlines_count, weekly_positive_headlines_count, weekly_negative_headlines_count)
 
-def data_plot(total_headlines_predicted, analysis_output, weekly_percentage_sentiment_price_pairs, weekly_net_sentiment_price_pairs):
+def data_map(total_headlines_predicted, analysis_output, weekly_percentage_sentiment_price_pairs, weekly_net_sentiment_price_pairs):
     total_headlines_predicted = analysis_output [0]
     if (analysis_output[1] == 0):
         weekly_percentage_sentiment_price_pairs.update({current_week_str:0})
@@ -121,17 +121,17 @@ def data_plot(total_headlines_predicted, analysis_output, weekly_percentage_sent
         weekly_net_sentiment_price_pairs.update({current_week_str:net_sentiment})
     return total_headlines_predicted
 
-tesla_weekly_percentage_sentiment_price_pairs = {}
-tesla_weekly_net_sentiment_price_pairs = {}
+tesla_percentage_pairs = {}
+tesla_net_pairs = {}
 
-amazon_weekly_percentage_sentiment_price_pairs = {}
-amazon_weekly_net_sentiment_price_pairs = {}
+amazon_percentage_pairs = {}
+amazon_net_pairs = {}
 
-netflix_weekly_percentage_sentiment_price_pairs = {}
-netflix_weekly_net_sentiment_price_pairs = {}
+netflix_percentage_pairs = {}
+netflix_net_pairs = {}
 
-apple_weekly_percentage_sentiment_price_pairs = {}
-apple_weekly_net_sentiment_price_pairs = {}
+apple_percentage_pairs = {}
+apple_net_pairs = {}
 
 
 current_week = datetime(2013,1,1)
@@ -142,225 +142,70 @@ while(current_week_str < "2022-10-01"):
     current_week_str = current_week.strftime("%Y-%m-%d")
     next_week_str = next_week.strftime("%Y-%m-%d")
     analysis_output = headline_analysis('Apple_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    total_headlines_predicted = data_plot(total_headlines_predicted, analysis_output, apple_weekly_percentage_sentiment_price_pairs, apple_weekly_net_sentiment_price_pairs)
+    total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, apple_percentage_pairs, apple_net_pairs)
     analysis_output = headline_analysis('Tesla_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    total_headlines_predicted = data_plot(total_headlines_predicted, analysis_output, tesla_weekly_percentage_sentiment_price_pairs, tesla_weekly_net_sentiment_price_pairs)
+    total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, tesla_percentage_pairs, tesla_net_pairs)
     analysis_output = headline_analysis('Amazon_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    total_headlines_predicted = data_plot(total_headlines_predicted, analysis_output, amazon_weekly_percentage_sentiment_price_pairs, amazon_weekly_net_sentiment_price_pairs)
+    total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, amazon_percentage_pairs, amazon_net_pairs)
     analysis_output = headline_analysis('Netflix_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    total_headlines_predicted = data_plot(total_headlines_predicted, analysis_output, netflix_weekly_percentage_sentiment_price_pairs, netflix_weekly_net_sentiment_price_pairs)
-    
+    total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, netflix_percentage_pairs, netflix_net_pairs)
     current_week = current_week + relativedelta(weeks=1)
 print("Total Headlines Predicted:", total_headlines_predicted)
 
-# Tesla Weekly Graphs
-########################################################################
 
-x1 = []
-y1 = []
-with open('TSLA_weekly.csv') as file_obj:
-    next(file_obj)
-    # Create reader object by passing the file object to reader method
-    reader_obj = csv.reader(file_obj)
-    for row in reader_obj:
-        if (row[0] >= "2013-01-01"):
-            x1.append(row[0])
-            y1.append(float(row[4]))
-x2 = []
-y2 = []
-for k, v in tesla_weekly_percentage_sentiment_price_pairs.items():
-    x2.append(k)
-    y2.append(v)
+def auto_graph(weekly_percentage_pairs, weekly_net_pairs, company_name, stock_name):
+    x1 = []
+    y1 = []
+    with open(stock_name + '_weekly.csv') as file_obj:
+        next(file_obj)
+        # Create reader object by passing the file object to reader method
+        reader_obj = csv.reader(file_obj)
+        for row in reader_obj:
+            if (row[0] >= "2013-01-01"):
+                x1.append(row[0])
+                y1.append(float(row[4]))
+    x2 = []
+    y2 = []
+    for k, v in weekly_percentage_pairs.items():
+        x2.append(k)
+        y2.append(v)
 
-# Create figure and axis objects with subplots()
+    # Create figure and axis objects with subplots()
 
-fig,ax=plt.subplots()
+    fig,ax=plt.subplots()
 
-# Make a plot for the stock price line chart
-ax.plot(x1, y1, color = 'r', label = "Stock Price")
-ax.set_xlabel("Date")
-ax.set_ylabel("TSLA Stock Price (USD)", color = "r", fontsize = 14)
+    # Make a plot for the stock price line chart
+    ax.plot(x1, y1, color = 'r', label = "Stock Price")
+    ax.set_xlabel("Date")
+    ax.set_ylabel(company_name + " Stock Price (USD)", color = "r", fontsize = 14)
 
-# Make a plot with different y-axis using second axis object for the sentiment bar chart
+    # Make a plot with different y-axis using second axis object for the sentiment bar chart
 
-ax2=ax.twinx()
-ax2.bar(x2, y2, color = 'b', label = "Sentiment", alpha = 0.5)
-ax2.set_ylabel("Tesla Positive Sentiment Each Week (%)",color="b",fontsize=14)
-ax.tick_params(axis = "x", rotation = 90, labelsize = 2)
-plt.show()
+    ax2=ax.twinx()
+    ax2.bar(x2, y2, color = 'b', label = "Sentiment", alpha = 0.5)
+    ax2.set_ylabel(company_name + " Positive Sentiment Each Week (%)",color="b",fontsize=14)
+    ax.tick_params(axis = "x", rotation = 90, labelsize = 2)
+    plt.show()
 
-x3 = []
-y3 = []
-for k, v in tesla_weekly_net_sentiment_price_pairs.items():
-    x3.append(k)
-    y3.append(v)
+    x3 = []
+    y3 = []
+    for k, v in weekly_net_pairs.items():
+        x3.append(k)
+        y3.append(v)
 
-fig,ax=plt.subplots()
-ax.plot(x1, y1, color = 'r', label = "Stock Price")
-ax.set_xlabel("Date")
-ax.set_ylabel("TSLA Stock Price (USD)", color = "r", fontsize = 14)
+    fig,ax=plt.subplots()
+    ax.plot(x1, y1, color = 'r', label = "Stock Price")
+    ax.set_xlabel("Date")
+    ax.set_ylabel(stock_name + " Stock Price (USD)", color = "r", fontsize = 14)
 
-ax2=ax.twinx()
-ax2.bar(x3, y3, color = 'b', label = "Sentiment", alpha = 0.5)
-ax2.set_ylabel("Tesla Net Sentiment Per Week",color="b",fontsize=14)
-ax.tick_params(axis = "x", rotation = 90, labelsize = 3)
-plt.show()
+    ax2=ax.twinx()
+    ax2.bar(x3, y3, color = 'b', label = "Sentiment", alpha = 0.5)
+    ax2.set_ylabel(company_name + " Net Sentiment Per Week",color="b",fontsize=14)
+    ax.tick_params(axis = "x", rotation = 90, labelsize = 3)
+    plt.show()
 
-# Amazon Weekly Graphs
-########################################################################
 
-x1 = []
-y1 = []
-with open('AMZN_weekly.csv') as file_obj:
-    next(file_obj)
-    # Create reader object by passing the file object to reader method
-    reader_obj = csv.reader(file_obj)
-    for row in reader_obj:
-        if (row[0] >= "2013-01-01"):
-            x1.append(row[0])
-            y1.append(float(row[4]))
-x2 = []
-y2 = []
-for k, v in amazon_weekly_percentage_sentiment_price_pairs.items():
-    x2.append(k)
-    y2.append(v)
-
-# Create figure and axis objects with subplots()
-
-fig,ax=plt.subplots()
-
-# Make a plot for the stock price line chart
-ax.plot(x1, y1, color = 'r', label = "Stock Price")
-ax.set_xlabel("Date")
-ax.set_ylabel("AMZN Stock Price (USD)", color = "r", fontsize = 14)
-
-# Make a plot with different y-axis using second axis object for the sentiment bar chart
-
-ax2=ax.twinx()
-ax2.bar(x2, y2, color = 'b', label = "Sentiment", alpha = 0.5)
-ax2.set_ylabel("Amazon Positive Sentiment Each Week (%)",color="b",fontsize=14)
-ax.tick_params(axis = "x", rotation = 90, labelsize = 2)
-plt.show()
-
-x3 = []
-y3 = []
-for k, v in amazon_weekly_net_sentiment_price_pairs.items():
-    x3.append(k)
-    y3.append(v)
-
-fig,ax=plt.subplots()
-ax.plot(x1, y1, color = 'r', label = "Stock Price")
-ax.set_xlabel("Date")
-ax.set_ylabel("AMZN Stock Price (USD)", color = "r", fontsize = 14)
-
-ax2=ax.twinx()
-ax2.bar(x3, y3, color = 'b', label = "Sentiment", alpha = 0.5)
-ax2.set_ylabel("Amazon Net Sentiment Per Week",color="b",fontsize=14)
-ax.tick_params(axis = "x", rotation = 90, labelsize = 3)
-plt.show()
-
-# Netflix Weekly Graphs
-########################################################################
-
-x1 = []
-y1 = []
-with open('NFLX_weekly.csv') as file_obj:
-    next(file_obj)
-    # Create reader object by passing the file object to reader method
-    reader_obj = csv.reader(file_obj)
-    for row in reader_obj:
-        if (row[0] >= "2013-01-01"):
-            x1.append(row[0])
-            y1.append(float(row[4]))
-x2 = []
-y2 = []
-for k, v in netflix_weekly_percentage_sentiment_price_pairs.items():
-    x2.append(k)
-    y2.append(v)
-
-# Create figure and axis objects with subplots()
-
-fig,ax=plt.subplots()
-
-# Make a plot for the stock price line chart
-ax.plot(x1, y1, color = 'r', label = "Stock Price")
-ax.set_xlabel("Date")
-ax.set_ylabel("NFLX Stock Price (USD)", color = "r", fontsize = 14)
-
-# Make a plot with different y-axis using second axis object for the sentiment bar chart
-
-ax2=ax.twinx()
-ax2.bar(x2, y2, color = 'b', label = "Sentiment", alpha = 0.5)
-ax2.set_ylabel("Netflix Positive Sentiment Each Week (%)",color="b",fontsize=14)
-ax.tick_params(axis = "x", rotation = 90, labelsize = 2)
-plt.show()
-
-x3 = []
-y3 = []
-for k, v in netflix_weekly_net_sentiment_price_pairs.items():
-    x3.append(k)
-    y3.append(v)
-
-fig,ax=plt.subplots()
-ax.plot(x1, y1, color = 'r', label = "Stock Price")
-ax.set_xlabel("Date")
-ax.set_ylabel("NFLX Stock Price (USD)", color = "r", fontsize = 14)
-
-ax2=ax.twinx()
-ax2.bar(x3, y3, color = 'b', label = "Sentiment", alpha = 0.5)
-ax2.set_ylabel("Netflix Net Sentiment Per Week",color="b",fontsize=14)
-ax.tick_params(axis = "x", rotation = 90, labelsize = 3)
-plt.show()
-
-# Apple Weekly Graphs
-########################################################################
-
-x1 = []
-y1 = []
-with open('AAPL_weekly.csv') as file_obj:
-    next(file_obj)
-    # Create reader object by passing the file object to reader method
-    reader_obj = csv.reader(file_obj)
-    for row in reader_obj:
-        if (row[0] >= "2013-01-01"):
-            x1.append(row[0])
-            y1.append(float(row[4]))
-x2 = []
-y2 = []
-for k, v in apple_weekly_percentage_sentiment_price_pairs.items():
-    x2.append(k)
-    y2.append(v)
-
-# Create figure and axis objects with subplots()
-
-fig,ax=plt.subplots()
-
-# Make a plot for the stock price line chart
-ax.plot(x1, y1, color = 'r', label = "Stock Price")
-ax.set_xlabel("Date")
-ax.set_ylabel("AAPL Stock Price (USD)", color = "r", fontsize = 14)
-
-# Make a plot with different y-axis using second axis object for the sentiment bar chart
-
-ax2=ax.twinx()
-ax2.bar(x2, y2, color = 'b', label = "Sentiment", alpha = 0.5)
-ax2.set_ylabel("Apple Positive Sentiment Each Week (%)",color="b",fontsize=14)
-ax.tick_params(axis = "x", rotation = 90, labelsize = 2)
-plt.show()
-
-x3 = []
-y3 = []
-for k, v in apple_weekly_net_sentiment_price_pairs.items():
-    x3.append(k)
-    y3.append(v)
-
-fig,ax=plt.subplots()
-ax.plot(x1, y1, color = 'r', label = "Stock Price")
-ax.set_xlabel("Date")
-ax.set_ylabel("AAPL Stock Price (USD)", color = "r", fontsize = 14)
-
-ax2=ax.twinx()
-ax2.bar(x3, y3, color = 'b', label = "Sentiment", alpha = 0.5)
-ax2.set_ylabel("Apple Net Sentiment Per Week",color="b",fontsize=14)
-ax.tick_params(axis = "x", rotation = 90, labelsize = 3)
-plt.show()
+auto_graph(apple_percentage_pairs, apple_net_pairs, "Apple", "AAPL")
+auto_graph(tesla_percentage_pairs, tesla_net_pairs, "Tesla", "TSLA")
+auto_graph(netflix_percentage_pairs, netflix_net_pairs, "Netflix", "NFLX")
+auto_graph(amazon_percentage_pairs, amazon_net_pairs, "Amazon", "AMZN")
