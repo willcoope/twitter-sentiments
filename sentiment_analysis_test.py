@@ -32,11 +32,13 @@ def remove_noise(news_tokens, stop_words = ()):
             cleaned_tokens.append(token.lower())
     return cleaned_tokens
 
+# Create dictionary of tokens for each headline
+
 def get_headlines_for_model(cleaned_tokens_list):
     for news_tokens in cleaned_tokens_list:
         yield dict([token, True] for token in news_tokens)
 
-# Scrape data from csv file and separate by sentiment
+# Scrape data from CSV file and separate by sentiment
 
 positive_headline_tokens = []
 negative_headline_tokens = []
@@ -54,7 +56,7 @@ for index, row in df.iterrows():
     if (row[1] == "positive"):
         positive_headline_tokens.append(row[0].split())
     if (row[1] == "negative"):
-        negative_headline_tokens.append(row[0].split())
+        negative_headline_tokens.append(row[0].split())    
 
 # Clean tokens and set sentiment for each headline
 
@@ -98,7 +100,6 @@ def headline_analysis(csv_file, total_headlines_predicted, weekly_headlines_coun
     # Create reader object by passing the file object to reader method
             reader_obj = csv.reader(file_obj)
             for row in reader_obj:
-                #print(row)
                 if(row[2] > current_week_str and row [2] < next_week_str):
                     weekly_headlines_count += 1
                     total_headlines_predicted += 1
@@ -108,6 +109,8 @@ def headline_analysis(csv_file, total_headlines_predicted, weekly_headlines_coun
                     if (classifier.classify(dict([token, True] for token in custom_tokens))== "Negative"):
                         weekly_negative_headlines_count += 1
     return (total_headlines_predicted, weekly_headlines_count, weekly_positive_headlines_count, weekly_negative_headlines_count)
+
+# Fills empty dictionaries with pairs, key being the date and value being the positive sentiment percentage or net sentiment
 
 def data_map(total_headlines_predicted, analysis_output, weekly_percentage_sentiment_price_pairs, weekly_net_sentiment_price_pairs):
     total_headlines_predicted = analysis_output [0]
@@ -121,6 +124,8 @@ def data_map(total_headlines_predicted, analysis_output, weekly_percentage_senti
         weekly_net_sentiment_price_pairs.update({current_week_str:net_sentiment})
     return total_headlines_predicted
 
+# Create two empty dictionaries for each company
+
 tesla_percentage_pairs = {}
 tesla_net_pairs = {}
 
@@ -133,6 +138,7 @@ netflix_net_pairs = {}
 apple_percentage_pairs = {}
 apple_net_pairs = {}
 
+# Iterate by week, starting from January 1st 2013, calling the headline_analysis function and using the results to call the data_map function
 
 current_week = datetime(2013,1,1)
 current_week_str = current_week.strftime("%Y-%m-%d")
@@ -152,6 +158,7 @@ while(current_week_str < "2022-10-01"):
     current_week = current_week + relativedelta(weeks=1)
 print("Total Headlines Predicted:", total_headlines_predicted)
 
+# Automatically generate graphs based on the company data given as a parameter
 
 def auto_graph(weekly_percentage_pairs, weekly_net_pairs, company_name, stock_name):
     x1 = []
@@ -204,6 +211,7 @@ def auto_graph(weekly_percentage_pairs, weekly_net_pairs, company_name, stock_na
     ax.tick_params(axis = "x", rotation = 90, labelsize = 3)
     plt.show()
 
+# Call auto_graph function for each company being analysed
 
 auto_graph(apple_percentage_pairs, apple_net_pairs, "Apple", "AAPL")
 auto_graph(tesla_percentage_pairs, tesla_net_pairs, "Tesla", "TSLA")
