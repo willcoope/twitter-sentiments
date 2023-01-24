@@ -76,10 +76,6 @@ positive_dataset = [(headline, "Positive")
 negative_dataset = [(headline, "Negative")
                      for headline in get_headlines_for_model(own_negative_cleaned_tokens_list)]
 
-# Function that checks the month of all data in a csv
-# If the month is correct and headline is classified as positive,
-# Increment positive count by 1.
-
 # Combine data and randomly split
 # Create model with training data then test
 
@@ -93,13 +89,15 @@ print("Accuracy is:", classify.accuracy(classifier, test_data))
 print(classifier.show_most_informative_features(25))
 
 # Separate tweets into months and creates pairs of values
-# Each month has a corresponding percentage of tweets that are positive
+# Each month has a corresponding percentage of tweets that are positive and a net sentiment
 
 def headline_analysis(csv_file, total_headlines_predicted, weekly_headlines_count, weekly_positive_headlines_count, weekly_negative_headlines_count):
     with open(csv_file) as file_obj:
     # Create reader object by passing the file object to reader method
             reader_obj = csv.reader(file_obj)
             for row in reader_obj:
+                print(row[2])
+                print(csv_file)
                 if(row[2] > current_week_str and row [2] < next_week_str):
                     weekly_headlines_count += 1
                     total_headlines_predicted += 1
@@ -143,7 +141,7 @@ apple_net_pairs = {}
 current_week = datetime(2013,1,1)
 current_week_str = current_week.strftime("%Y-%m-%d")
 total_headlines_predicted = 0
-while(current_week_str < "2022-10-01"):
+while(current_week_str < "2023-01-01"):
     next_week = current_week + relativedelta(weeks=1)
     current_week_str = current_week.strftime("%Y-%m-%d")
     next_week_str = next_week.strftime("%Y-%m-%d")
