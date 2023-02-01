@@ -96,8 +96,6 @@ def headline_analysis(csv_file, total_headlines_predicted, weekly_headlines_coun
     # Create reader object by passing the file object to reader method
             reader_obj = csv.reader(file_obj)
             for row in reader_obj:
-                print(row[2])
-                print(csv_file)
                 if(row[2] > current_week_str and row [2] < next_week_str):
                     weekly_headlines_count += 1
                     total_headlines_predicted += 1
