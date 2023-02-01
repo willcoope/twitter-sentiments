@@ -4,8 +4,8 @@ import pandas as pd
 # Create list of accounts to search
 accounts_list = ["CNBC","FT", "Reuters"]
 #stocks_list = ["Tesla", "Amazon"]
-stocks_list = ["Apple", "Netflix", "Tesla", "Amazon"]
-
+stocks_list = ["Meta", "Netflix", "Tesla", "Amazon"]
+stocks_list = ["Pfizer", "Microsoft", "Disney", "Alphabet"]
 #Iterate across accounts listed
 for stock in stocks_list:
     tweets_list = []
