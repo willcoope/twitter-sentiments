@@ -146,6 +146,12 @@ pfizer_net_pairs = {}
 microsoft_percentage_pairs = {}
 microsoft_net_pairs = {}
 
+mcdonalds_percentage_pairs = {}
+mcdonalds_net_pairs = {}
+
+starbucks_percentage_pairs = {}
+starbucks_net_pairs = {}
+
 # Iterate by week, starting from January 1st 2013, calling the headline_analysis function and using the results to call the data_map function
 
 current_week = datetime(2013,1,1)
@@ -171,6 +177,10 @@ while(current_week_str < "2023-01-01"):
     total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, pfizer_percentage_pairs, pfizer_net_pairs)
     analysis_output = headline_analysis('Microsoft_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
     total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, microsoft_percentage_pairs, microsoft_net_pairs)
+    analysis_output = headline_analysis('McDonald\'s_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
+    total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, mcdonalds_percentage_pairs, mcdonalds_net_pairs)
+    analysis_output = headline_analysis('Starbucks_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
+    total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, starbucks_percentage_pairs, starbucks_net_pairs)
     current_week = current_week + relativedelta(weeks=1)
 print("Total Headlines Predicted:", total_headlines_predicted)
 
@@ -237,3 +247,5 @@ auto_graph(disney_percentage_pairs, disney_net_pairs, "Disney", "DIS")
 auto_graph(alphabet_percentage_pairs, alphabet_net_pairs, "Alphabet", "GOOGL")
 auto_graph(pfizer_percentage_pairs, pfizer_net_pairs, "Pfizer", "PFE")
 auto_graph(microsoft_percentage_pairs, microsoft_net_pairs, "Microsoft", "MSFT")
+auto_graph(mcdonalds_percentage_pairs, mcdonalds_net_pairs, "McDonald\'s", "MCD")
+auto_graph(starbucks_percentage_pairs, starbucks_net_pairs, "Starbucks", "SBUX")

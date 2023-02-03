@@ -2,10 +2,8 @@ import snscrape.modules.twitter as sntwitter
 import pandas as pd
 
 # Create list of accounts to search
-accounts_list = ["CNBC","FT", "Reuters"]
-#stocks_list = ["Tesla", "Amazon"]
-stocks_list = ["Meta", "Netflix", "Tesla", "Amazon"]
-stocks_list = ["Pfizer", "Microsoft", "Disney", "Alphabet"]
+accounts_list = ["CNBC","FT", "Reuters", "CNN", "TheEconomist", "BBCWorld","BBCNews", "BBCBreaking", "nytimes", "WSJ", "washingtonpost", "AP", "guardian", "SkyNews", "TelegraphNews", "ABC"]
+stocks_list = ["Meta", "Netflix", "Tesla", "Amazon", "Pfizer", "Microsoft", "Disney", "Alphabet", "McDonald's", "Starbucks"]
 #Iterate across accounts listed
 for stock in stocks_list:
     tweets_list = []
