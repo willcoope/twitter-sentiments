@@ -1,5 +1,5 @@
 # twitter-sentiments
-Twitter Sentiments consists of a single Python file and a collection of CSV files, each containing the stock prices of a company each week from the 1st January 2013 until the 1st January 2023. These files are used by the sentiment_analysis.py file in order to graph teh correlation between sentiment online towards a company and the stock price that week.
+Twitter Sentiments consists of a single Python file and a collection of CSV files, each containing the stock prices of a company each week from the 1st January 2013 until the 1st January 2023. These files are used by the sentiment_analysis.py file in order to graph the correlation between sentiment online towards a company and the stock price that week.
 
 Requirements:
 Python - version 3 or later
