@@ -5,7 +5,7 @@ Requirements:
 Python - version 3 or later
 
 Steps:
-1. Clone the repository
+1. Clone the repository.
 2. Run the following command:
 
 python -c 'import sentiment_analysis; sentiment_analysis.twitter_scrape()'
