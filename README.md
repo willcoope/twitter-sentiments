@@ -7,7 +7,8 @@ Python - version 3 or later
 Steps:
 1. Clone the repository
 2. Run the following command:
-    python -c 'import sentiment_analysis; sentiment_analysis.twitter_scrape()'
+
+python -c 'import sentiment_analysis; sentiment_analysis.twitter_scrape()'
 
 This will create a CSV file for each of the stocks, containing every tweet referencing that company from the financial news Twitter accounts listed.
 
