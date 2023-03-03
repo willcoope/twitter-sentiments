@@ -13,6 +13,7 @@ python -c 'import sentiment_analysis; sentiment_analysis.twitter_scrape()'
 This will create a CSV file for each of the stocks, containing every tweet referencing that company from the financial news Twitter accounts listed.
 
 3. Run the following command:
-    python3 sentiment_analysis.py
+
+python3 sentiment_analysis.py
 
 This will use the all-data.csv file to train the Naive Bayes classifier to analyse the sentiments of tweets, then analyse all the tweets for each company and generate graphs showing stock prices each week and corresponding sentiments.
