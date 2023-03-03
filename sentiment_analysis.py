@@ -75,15 +75,6 @@ for index, row in df.iterrows():
         positive_headline_tokens.append(row[1].split())
     if (row[0] == "negative"):
         negative_headline_tokens.append(row[1].split())
-# df = pd.read_csv('all-data2.csv', encoding = "ISO-8859-1")
-# df.reset_index()
-# for index, row in df.iterrows():
-#     if (row[0] == "positive"):
-#         positive_headline_tokens.append(row[1].split())
-#     if (row[0] == "negative"):
-#         negative_headline_tokens.append(row[1].split())    
-
-# Clean tokens and set sentiment for each headline
 
 own_positive_cleaned_tokens_list = []
 own_negative_cleaned_tokens_list = []
