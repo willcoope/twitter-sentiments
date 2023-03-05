@@ -234,6 +234,10 @@ def auto_graph(weekly_percentage_pairs, weekly_net_pairs, company_name, stock_na
     ax2.bar(x2, y2, color = 'b', label = "Sentiment", alpha = 0.5)
     ax2.set_ylabel(company_name + " Positive Sentiment Each Week (%)",color="b",fontsize=14)
     ax.tick_params(axis = "x", rotation = 90, labelsize = 2)
+    temp = ax.xaxis.get_ticklabels()
+    temp = list(set(temp) - set(temp[::2]))
+    for label in temp:
+        label.set_visible(False)
     plt.show()
 
     x3 = []
@@ -251,6 +255,10 @@ def auto_graph(weekly_percentage_pairs, weekly_net_pairs, company_name, stock_na
     ax2.bar(x3, y3, color = 'b', label = "Sentiment", alpha = 0.5)
     ax2.set_ylabel(company_name + " Net Sentiment Per Week",color="b",fontsize=14)
     ax.tick_params(axis = "x", rotation = 90, labelsize = 3)
+    temp = ax.xaxis.get_ticklabels()
+    temp = list(set(temp) - set(temp[::2]))
+    for label in temp:
+        label.set_visible(False)
     plt.show()
 
 # Call auto_graph function for each company being analysed
