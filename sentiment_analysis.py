@@ -39,24 +39,24 @@ def twitter_scrape():
 
 # Remove hyperlinks, punctuation and special characters from tokens
 # Convert remaining tokens to a normal form (losing becomes lose, profits becomes profit)
+# Based on the Digital Oceans implementation of the NLTK library, altered for simplicity and clarity
 
-def remove_noise(news_tokens, stop_words = ()):
-    cleaned_tokens = []
+def remove_noise(news_tokens, stopwords = ()):
+    own_cleaned_tokens = []
     for token, tag in pos_tag(news_tokens):
         token = re.sub('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+#]|[!*\(\),]|'\
                        '(?:%[0-9a-fA-F][0-9a-fA-F]))+','', token)
         token = re.sub("(@[A-Za-z0-9_]+)","", token)
         if tag.startswith("NN"):
-            pos = 'n'
+            word_type = 'n'
         elif tag.startswith('VB'):
-            pos = 'v'
+            word_type = 'v'
         else:
-            pos = 'a'
-        lemmatizer = WordNetLemmatizer()
-        token = lemmatizer.lemmatize(token, pos)
-        if len(token) > 0 and token not in string.punctuation and token.lower() not in stop_words:
-            cleaned_tokens.append(token.lower())
-    return cleaned_tokens
+            word_type = 'a'
+        token = WordNetLemmatizer().lemmatize(token, word_type)
+        if len(token) > 0 and token not in string.punctuation and token.lower() not in stopwords:
+            own_cleaned_tokens.append(token.lower())
+    return own_cleaned_tokens
 
 # Create dictionary of tokens for each headline
 
@@ -68,40 +68,35 @@ def get_headlines_for_model(cleaned_tokens_list):
 
 positive_headline_tokens = []
 negative_headline_tokens = []
-df = pd.read_csv('all-data.csv', encoding = "ISO-8859-1")
+df = pd.read_csv('all_training_data.csv', encoding = "ISO-8859-1")
 df.reset_index()
 for index, row in df.iterrows():
     if (row[0] == "positive"):
         positive_headline_tokens.append(row[1].split())
     if (row[0] == "negative"):
         negative_headline_tokens.append(row[1].split())
-
 own_positive_cleaned_tokens_list = []
 own_negative_cleaned_tokens_list = []
-
-stop_words = stopwords.words('english')
-
+stopwords = stopwords.words('english')
 for tokens in positive_headline_tokens:
-    own_positive_cleaned_tokens_list.append(remove_noise(tokens, stop_words))
-
+    own_positive_cleaned_tokens_list.append(remove_noise(tokens, stopwords))
 for tokens in negative_headline_tokens:
-    own_negative_cleaned_tokens_list.append(remove_noise(tokens, stop_words))
-
-positive_dataset = [(headline, "Positive")
+    own_negative_cleaned_tokens_list.append(remove_noise(tokens, stopwords))
+ready_positive_dataset = [(headline, "Positive")
                          for headline in get_headlines_for_model(own_positive_cleaned_tokens_list)]
-negative_dataset = [(headline, "Negative")
+ready_negative_dataset = [(headline, "Negative")
                      for headline in get_headlines_for_model(own_negative_cleaned_tokens_list)]
 
-# Combine data and randomly split
+# Combine positive and negative sentiment data and randomly split
 # Create model with training data then test
 
-dataset = positive_dataset + negative_dataset
+dataset = ready_positive_dataset + ready_negative_dataset
 print("Dataset Length:", len(dataset))
 random.shuffle(dataset)
 train_data = dataset[:4100]
 test_data = dataset[4100:]
 classifier = NaiveBayesClassifier.train(train_data)
-print("Accuracy is:", classify.accuracy(classifier, test_data))
+print("Accuracy:", classify.accuracy(classifier, test_data))
 print(classifier.show_most_informative_features(25))
 
 # Separate tweets into months and creates pairs of values

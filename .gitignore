@@ -3,4 +3,4 @@
 *.jpeg
 *.png
 !*weekly*
-!all-data.csv
+!all_training_data.csv
