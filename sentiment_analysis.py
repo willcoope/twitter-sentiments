@@ -44,10 +44,8 @@ def twitter_scrape():
 def remove_noise(news_tokens, stopwords = ()):
     own_cleaned_tokens = []
     for token, tag in pos_tag(news_tokens):
-        token = re.sub('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+#]|[!*\(\),]|'\
-                       '(?:%[0-9a-fA-F][0-9a-fA-F]))+','', token)
-        token = re.sub("(@[A-Za-z0-9_]+)","", token)
-        if tag.startswith("NN"):
+        token = re.sub('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+#]|[!*\(\),]|''(?:%[0-9a-fA-F][0-9a-fA-F]))+''(@[A-Za-z0-9_]+)','', token)
+        if tag.startswith("NN"): 
             word_type = 'n'
         elif tag.startswith('VB'):
             word_type = 'v'
