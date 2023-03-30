@@ -113,14 +113,15 @@ def headline_analysis(csv_file, total_headlines_predicted, weekly_headlines_coun
     # Create reader object by passing the file object to reader method
             reader_obj = csv.reader(file_obj)
             for row in reader_obj:
-                if(row[2] > current_week_str and row [2] < next_week_str):
-                    weekly_headlines_count += 1
-                    total_headlines_predicted += 1
-                    custom_tokens = remove_noise(word_tokenize(row[3]))
-                    if (classifier.classify(dict([token, True] for token in custom_tokens))== "Positive"):
-                        weekly_positive_headlines_count += 1
-                    if (classifier.classify(dict([token, True] for token in custom_tokens))== "Negative"):
-                        weekly_negative_headlines_count += 1
+                if row[2]:
+                    if(row[2] > current_week_str and row [2] < next_week_str):
+                        weekly_headlines_count += 1
+                        total_headlines_predicted += 1
+                        custom_tokens = remove_noise(word_tokenize(row[3]))
+                        if (classifier.classify(dict([token, True] for token in custom_tokens))== "Positive"):
+                            weekly_positive_headlines_count += 1
+                        if (classifier.classify(dict([token, True] for token in custom_tokens))== "Negative"):
+                            weekly_negative_headlines_count += 1
     return (total_headlines_predicted, weekly_headlines_count, weekly_positive_headlines_count, weekly_negative_headlines_count)
 
 # Fills empty dictionaries with pairs, key being the date and value being the positive sentiment percentage or net sentiment
