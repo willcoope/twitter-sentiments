@@ -66,7 +66,7 @@ def get_headlines_for_model(cleaned_tokens_list):
 
 # Scrape data from CSV file and separate by sentiment
 
-run_scrape = input("Run Twitter scrape (Mandatory if first time using) Y/N: ")
+run_scrape = input("Run Twitter scrape (Mandatory if changes have been made to the code) Y/N: ")
 if run_scrape.lower() == 'y':
     twitter_scrape()
 
