@@ -201,7 +201,7 @@ while(current_week_str < "2023-01-01"):
     total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, mcdonalds_percentage_pairs, mcdonalds_net_pairs)
     analysis_output = headline_analysis('Starbucks_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
     total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, starbucks_percentage_pairs, starbucks_net_pairs)
-    print("Analysing tweets for week beginning" + current_week_str + " completed!")
+    print("Analysing tweets for week beginning " + current_week_str + " completed!")
     current_week = current_week + relativedelta(weeks=1)
 print("Total Headlines Predicted:", total_headlines_predicted)
 
