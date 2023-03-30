@@ -64,6 +64,10 @@ def get_headlines_for_model(cleaned_tokens_list):
 
 # Scrape data from CSV file and separate by sentiment
 
+run_scrape = input("Run Twitter scrape (Mandatory if first time using) Y/N: ")
+if run_scrape.lower() == 'y':
+    twitter_scrape()
+
 positive_headline_tokens = []
 negative_headline_tokens = []
 df = pd.read_csv('all_training_data.csv', encoding = "ISO-8859-1")
@@ -170,6 +174,7 @@ while(current_week_str < "2023-01-01"):
     next_week = current_week + relativedelta(weeks=1)
     current_week_str = current_week.strftime("%Y-%m-%d")
     next_week_str = next_week.strftime("%Y-%m-%d")
+    print("Analysing tweets for week beginning " + current_week_str + "...")
     analysis_output = headline_analysis('Apple_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
     total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, apple_percentage_pairs, apple_net_pairs)
     analysis_output = headline_analysis('Tesla_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
@@ -190,6 +195,7 @@ while(current_week_str < "2023-01-01"):
     total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, mcdonalds_percentage_pairs, mcdonalds_net_pairs)
     analysis_output = headline_analysis('Starbucks_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
     total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, starbucks_percentage_pairs, starbucks_net_pairs)
+    print("Analysing tweets for week beginning" + current_week_str + " completed!")
     current_week = current_week + relativedelta(weeks=1)
 print("Total Headlines Predicted:", total_headlines_predicted)
 
