@@ -20,18 +20,18 @@ def twitter_scrape():
     stocks_list = ["Meta", "Netflix", "Tesla", "Amazon", "Pfizer", "Microsoft", "Disney", "Alphabet", "McDonald's", "Starbucks"]
     #Iterate across accounts listed
     for stock in stocks_list:
+        print("Scraping tweets for " + stock + "...")
         tweets_list = []
         for account in accounts_list:
-            print("Scraping tweets for " + stock + "...")
             # Create empty list to store scraped tweets
             # Search tweets since 2013 from the specified account whose text contains the keyword
             for i,tweet in enumerate(sntwitter.TwitterSearchScraper(stock + ' since:2013-01-01 until:2023-01-01 from:' + account).get_items()):
                 if i>20000:
                     break
                 # Disallow replies and retweets
-                if "@" and "RT" not in tweet.content:
+                if "@" and "RT" not in tweet.rawContent:
                     # Add relevant data to list
-                    tweets_list.append([tweet.user.username, tweet.date, tweet.content])
+                    tweets_list.append([tweet.user.username, tweet.date, tweet.rawContent])
         # Create dataframe from the tweets_list above
         tweets_df = pd.DataFrame(tweets_list, columns=['Username', 'Datetime', 'Text'])
         # Convert dataframe to CSV file with custom name
