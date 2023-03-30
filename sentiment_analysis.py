@@ -204,6 +204,8 @@ print("Total Headlines Predicted:", total_headlines_predicted)
 # Automatically generate graphs based on the company data given as a parameter
 
 def auto_graph(weekly_percentage_pairs, weekly_net_pairs, company_name, stock_name):
+    graph_name1 = stock_name + "_positive"
+    graph_name2 = stock_name + "_net"
     x1 = []
     y1 = []
     with open(stock_name + '_weekly.csv') as file_obj:
@@ -239,6 +241,7 @@ def auto_graph(weekly_percentage_pairs, weekly_net_pairs, company_name, stock_na
     temp = list(set(temp) - set(temp[::4]))
     for label in temp:
         label.set_visible(False)
+    plt.savefig(graph_name1)
     plt.show()
 
     x3 = []
@@ -260,6 +263,7 @@ def auto_graph(weekly_percentage_pairs, weekly_net_pairs, company_name, stock_na
     temp = list(set(temp) - set(temp[::4]))
     for label in temp:
         label.set_visible(False)
+    plt.savefig(graph_name2)
     plt.show()
 
 # Call auto_graph function for each company being analysed
