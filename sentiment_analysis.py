@@ -69,7 +69,7 @@ def get_headlines_for_model(cleaned_tokens_list):
 
 run_scrape = input("Run Twitter scrape (Necessary only if changes have been made to the code) Y/N: ")
 if run_scrape.lower() == 'y':
-    run_scrape = input("This action will overwrite existing records and takes a long time. These new files may contain some scraping errors that will need to be removed manually. Is this completely necessary: Y/N: ")
+    run_scrape = input("This action will overwrite existing records and may take up to 30 minutes to complete. Is this completely necessary: Y/N: ")
     if run_scrape.lower() == 'y':
         twitter_scrape()
 
