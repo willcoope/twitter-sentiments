@@ -110,7 +110,7 @@ print(classifier.show_most_informative_features(25))
 # Each month has a corresponding percentage of tweets that are positive and a net sentiment
 
 def headline_analysis(csv_file, total_headlines_predicted, weekly_headlines_count, weekly_positive_headlines_count, weekly_negative_headlines_count):
-    with open(csv_file) as file_obj:
+    with open(csv_file, 'r', encoding='utf-8') as file_obj:
     # Create reader object by passing the file object to reader method
             reader_obj = csv.reader(file_obj)
             for row in reader_obj:
@@ -141,68 +141,37 @@ def data_map(total_headlines_predicted, analysis_output, weekly_percentage_senti
 
 # Create two empty dictionaries for each company
 
-tesla_percentage_pairs = {}
-tesla_net_pairs = {}
-
-amazon_percentage_pairs = {}
-amazon_net_pairs = {}
-
-netflix_percentage_pairs = {}
-netflix_net_pairs = {}
-
-apple_percentage_pairs = {}
-apple_net_pairs = {}
-
-disney_percentage_pairs = {}
-disney_net_pairs = {}
-
-alphabet_percentage_pairs = {}
-alphabet_net_pairs = {}
-
-pfizer_percentage_pairs = {}
-pfizer_net_pairs = {}
-
-microsoft_percentage_pairs = {}
-microsoft_net_pairs = {}
-
-mcdonalds_percentage_pairs = {}
-mcdonalds_net_pairs = {}
-
-starbucks_percentage_pairs = {}
-starbucks_net_pairs = {}
+# Create a dictionary of companies and their corresponding data pairs
+companies = {
+    'Tesla': {'percentage_pairs': {}, 'net_pairs': {}, 'stock_name': "TSLA"},
+    'Amazon': {'percentage_pairs': {}, 'net_pairs': {}, 'stock_name': "AMZN"},
+    'Netflix': {'percentage_pairs': {}, 'net_pairs': {}, 'stock_name': "NFLX"},
+    'Apple': {'percentage_pairs': {}, 'net_pairs': {}, 'stock_name': "AAPL"},
+    'Disney': {'percentage_pairs': {}, 'net_pairs': {}, 'stock_name': "DIS"},
+    'Alphabet': {'percentage_pairs': {}, 'net_pairs': {}, 'stock_name': "GOOGL"},
+    'Pfizer': {'percentage_pairs': {}, 'net_pairs': {}, 'stock_name': "PFE"},
+    'Microsoft': {'percentage_pairs': {}, 'net_pairs': {}, 'stock_name': "MSFT"},
+    'McDonald\'s': {'percentage_pairs': {}, 'net_pairs': {}, 'stock_name': "MCD"},
+    'Starbucks': {'percentage_pairs': {}, 'net_pairs': {}, 'stock_name': "SBUX"}
+}
 
 # Iterate by week, starting from January 1st 2013, calling the headline_analysis function and using the results to call the data_map function
-
 current_week = datetime(2013,1,1)
-current_week_str = current_week.strftime("%Y-%m-%d")
 total_headlines_predicted = 0
-while(current_week_str < "2023-01-01"):
+while(current_week.strftime("%Y-%m-%d") < "2023-01-01"):
     next_week = current_week + relativedelta(weeks=1)
     current_week_str = current_week.strftime("%Y-%m-%d")
     next_week_str = next_week.strftime("%Y-%m-%d")
     print("Analysing tweets for week beginning " + current_week_str + "...")
-    analysis_output = headline_analysis('Apple_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, apple_percentage_pairs, apple_net_pairs)
-    analysis_output = headline_analysis('Tesla_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, tesla_percentage_pairs, tesla_net_pairs)
-    analysis_output = headline_analysis('Amazon_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, amazon_percentage_pairs, amazon_net_pairs)
-    analysis_output = headline_analysis('Netflix_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, netflix_percentage_pairs, netflix_net_pairs)
-    analysis_output = headline_analysis('Disney_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, disney_percentage_pairs, disney_net_pairs)
-    analysis_output = headline_analysis('Alphabet_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, alphabet_percentage_pairs, alphabet_net_pairs)
-    analysis_output = headline_analysis('Pfizer_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, pfizer_percentage_pairs, pfizer_net_pairs)
-    analysis_output = headline_analysis('Microsoft_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, microsoft_percentage_pairs, microsoft_net_pairs)
-    analysis_output = headline_analysis('McDonald\'s_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, mcdonalds_percentage_pairs, mcdonalds_net_pairs)
-    analysis_output = headline_analysis('Starbucks_all_tweets.csv', total_headlines_predicted, 0, 0, 0)
-    total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, starbucks_percentage_pairs, starbucks_net_pairs)
+
+    for company, data_pairs in companies.items():
+        csv_file = f'{company}_all_tweets.csv'
+        analysis_output = headline_analysis(csv_file, total_headlines_predicted, 0, 0, 0)
+        total_headlines_predicted = data_map(total_headlines_predicted, analysis_output, data_pairs['percentage_pairs'], data_pairs['net_pairs'])
+
     print("Analysing tweets for week beginning " + current_week_str + " completed!")
     current_week = current_week + relativedelta(weeks=1)
+
 print("Total Headlines Predicted:", total_headlines_predicted)
 
 # Automatically generate graphs based on the company data given as a parameter
@@ -269,16 +238,8 @@ def auto_graph(weekly_percentage_pairs, weekly_net_pairs, company_name, stock_na
         label.set_visible(False)
     plt.savefig(graph_name2)
     plt.show()
-
-# Call auto_graph function for each company being analysed
-
-auto_graph(apple_percentage_pairs, apple_net_pairs, "Apple", "AAPL")
-auto_graph(tesla_percentage_pairs, tesla_net_pairs, "Tesla", "TSLA")
-auto_graph(netflix_percentage_pairs, netflix_net_pairs, "Netflix", "NFLX")
-auto_graph(amazon_percentage_pairs, amazon_net_pairs, "Amazon", "AMZN")
-auto_graph(disney_percentage_pairs, disney_net_pairs, "Disney", "DIS")
-auto_graph(alphabet_percentage_pairs, alphabet_net_pairs, "Alphabet", "GOOGL")
-auto_graph(pfizer_percentage_pairs, pfizer_net_pairs, "Pfizer", "PFE")
-auto_graph(microsoft_percentage_pairs, microsoft_net_pairs, "Microsoft", "MSFT")
-auto_graph(mcdonalds_percentage_pairs, mcdonalds_net_pairs, "McDonald\'s", "MCD")
-auto_graph(starbucks_percentage_pairs, starbucks_net_pairs, "Starbucks", "SBUX")
+    
+# Iterate over the companies dictionary
+for company, data_pairs in companies.items():
+    # Call the auto_graph function for each company
+    auto_graph(data_pairs['percentage_pairs'], data_pairs['net_pairs'], company, data_pairs['stock_name'])
